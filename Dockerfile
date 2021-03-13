@@ -1,9 +1,10 @@
-FROM python:3.8.3-alpine
+FROM python:3.8-alpine
 
 WORKDIR /usr/src/app
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV DEBUG 0
 
 # install psycopg2 dependencies
 RUN apk update \
@@ -15,4 +16,5 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+RUN adduser -D dockeruser
+USER dockeruser
