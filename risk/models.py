@@ -1,16 +1,18 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
-# Create your models here.
 
 class Company(models.Model):
     name = models.CharField(max_length=255)
     logo = models.BinaryField()
     description = models.CharField(max_length=255, null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Risk(models.Model):
-    risk_assignee = models.ForeignKey(User, on_delete=models.CASCADE)
+    risk_assignee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project_phase = models.ForeignKey('ProjectPhase', on_delete=models.CASCADE)
     risk_type = models.ForeignKey('RiskType', on_delete=models.CASCADE)
     risk_impacts = models.ForeignKey('RiskImpact', on_delete=models.CASCADE)
@@ -29,10 +31,9 @@ class Risk(models.Model):
 
 
 class Project(models.Model):
-    project_manager = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
+    project_manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects')
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
-    #assigned_to = models.ManyToManyField(User)
-    customers = models.ManyToManyField(User)
+    customers = models.ManyToManyField(settings.AUTH_USER_MODEL)
 
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -69,6 +70,5 @@ class ProjectPhase(models.Model):
     real_end_date = models.DateField(null=True)
     estimated_end_date = models.DateField(null=True)
 
-    phase_manager = models.ForeignKey(User, on_delete=models.CASCADE)
+    phase_manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
-
