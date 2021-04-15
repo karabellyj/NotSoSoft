@@ -1,0 +1,90 @@
+from django import forms
+from django.forms import DateTimeInput, HiddenInput
+
+from users.utils import (get_customers_qs, get_phase_manager_qs,
+                         get_project_managers_qs)
+
+from .models import Project, ProjectPhase, Risk
+
+
+class CreateProjectForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['customers'].queryset = get_customers_qs(company=user.company)
+
+    class Meta:
+        model = Project
+        fields = '__all__'
+        widgets = {
+            'project_manager': HiddenInput,
+            'company': HiddenInput,
+        }
+
+
+class UpdateProjectForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['customers'].queryset = get_customers_qs(company=user.company)
+
+    class Meta:
+        model = Project
+        fields = ('name', 'description', 'start_date', 'real_end', 'estimated_end_date', 'customers')
+
+
+class CreateProjectPhaseForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['phase_manager'].queryset = get_phase_manager_qs(company=user.company)
+
+    class Meta:
+        model = ProjectPhase
+        fields = '__all__'
+        widgets = {
+            'project': HiddenInput,
+            'start_date': DateTimeInput
+        }
+
+
+class UpdateProjectPhaseForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['phase_manager'].queryset = get_phase_manager_qs(company=user.company)
+
+    class Meta:
+        model = ProjectPhase
+        fields = ('name', 'description', 'start_date', 'real_end_date', 'estimated_end_date', 'phase_manager')
+
+
+class CreateRiskForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['risk_assignee'].queryset = get_project_managers_qs(company=user.company) | get_phase_manager_qs(company=user.company)
+
+    class Meta:
+        model = Risk
+        fields = '__all__'
+        widgets = {
+            'project_phase': HiddenInput
+        }
+
+
+class UpdateRiskForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['risk_assignee'].queryset = get_project_managers_qs(company=user.company) | get_phase_manager_qs(company=user.company)
+
+    class Meta:
+        model = ProjectPhase
+        exclude = ('project_phase',)
