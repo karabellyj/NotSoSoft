@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import (CreateView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
-from users.utils import is_company_manager, is_project_manager
+from users.utils import is_company_manager, is_customer, is_project_manager
 
 from .forms import (CreateProjectForm, CreateProjectPhaseForm, CreateRiskForm,
                     UpdateProjectForm, UpdateProjectPhaseForm, UpdateRiskForm)
@@ -13,9 +14,10 @@ class HomeView(TemplateView):
     template_name = 'home.html'
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(PermissionRequiredMixin, CreateView):
     form_class = CreateProjectForm
     template_name = "risk/project_change.html"
+    permission_required = ('risk.add_project',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -30,10 +32,11 @@ class ProjectCreateView(CreateView):
         return initial
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(PermissionRequiredMixin, UpdateView):
     model = Project
     form_class = UpdateProjectForm
     template_name = "risk/project_change.html"
+    permission_required = ('risk.change_project',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -53,12 +56,15 @@ class ProjectListView(ListView):
             return qs.filter(company=user.company)
         elif is_project_manager(user):
             return qs.filter(project_manager=user)
+        elif is_customer(user):
+            return qs.filter(customers__in=[user.pk])
         return qs
 
 
-class ProjectDetailView(DetailView):
+class ProjectDetailView(PermissionRequiredMixin, DetailView):
     model = Project
     template_name = "risk/project_detail.html"
+    permission_required = ('risk.view_project')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -70,9 +76,10 @@ class ProjectDetailView(DetailView):
         return context
 
 
-class ProjectPhaseCreateView(CreateView):
+class ProjectPhaseCreateView(PermissionRequiredMixin, CreateView):
     form_class = CreateProjectPhaseForm
     template_name = "risk/project_phase_form.html"
+    permission_required = ('risk.add_projectphase',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -91,10 +98,11 @@ class ProjectPhaseCreateView(CreateView):
         return context
 
 
-class ProjectPhaseUpdateView(UpdateView):
+class ProjectPhaseUpdateView(PermissionRequiredMixin, UpdateView):
     model = ProjectPhase
     form_class = UpdateProjectPhaseForm
     template_name = "risk/project_phase_change.html"
+    permission_required = ('risk.change_projectphase',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -107,9 +115,10 @@ class ProjectPhaseUpdateView(UpdateView):
         return context
 
 
-class ProjectPhaseDetailView(DetailView):
+class ProjectPhaseDetailView(PermissionRequiredMixin, DetailView):
     model = ProjectPhase
     template_name = "risk/project_phase_detail.html"
+    permission_required = ('risk.view_projectphase',)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -118,9 +127,10 @@ class ProjectPhaseDetailView(DetailView):
         return context
 
 
-class RiskCreateView(CreateView):
+class RiskCreateView(PermissionRequiredMixin, CreateView):
     form_class = CreateRiskForm
     template_name = 'risk/risk_form.html'
+    permission_required = ('risk.add_risk',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -140,10 +150,11 @@ class RiskCreateView(CreateView):
         return context
 
 
-class RiskUpdateView(UpdateView):
+class RiskUpdateView(PermissionRequiredMixin, UpdateView):
     model = Risk
     form_class = UpdateRiskForm
     template_name = "risk/risk-change.html"
+    permission_required = ('risk.change_risk',)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -157,9 +168,10 @@ class RiskUpdateView(UpdateView):
         return context
 
 
-class RiskDetailView(DetailView):
+class RiskDetailView(PermissionRequiredMixin, DetailView):
     model = Risk
     template_name = "risk/risk-detail.html"
+    permission_required = ('risk.view_risk',)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -168,9 +180,10 @@ class RiskDetailView(DetailView):
         return context
 
 
-class RiskListView(ListView):
+class RiskListView(PermissionRequiredMixin, ListView):
     model = Risk
     template_name = "risk/risk-register.html"
+    permission_required = ('risk.view_risk',)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
