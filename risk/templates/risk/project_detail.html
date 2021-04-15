@@ -1,20 +1,153 @@
 {% extends 'base.html' %}
 {% block title %}Project Detail{% endblock title %}
 {% block content %}
-    <p>{{ object.name }}</p>
-    <div>
-        <a href="{% url 'project-phase-create' object.pk %}">Create Phase</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10 offset-md-1  row">
+            <div class="col-2">
+                <nav class="navbar  bg-light ">
+                    <!-- Links -->
+                        <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href={% url 'project-detail' project.pk %}>Project name</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Risk register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Metrix</a>
+                        </li>
+                        </ul>
+
+                </nav>
+            </div>
+        {% block projekt-div %}
+            <div class="bg-light col-10">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Project details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <dl class="col-sm-6 row">
+                                <dt class="col-sm-4">Project name</dt>
+                                <dd class="col-sm-8"> {{ object.name }}</dd>
+                                <dt class="col-sm-4">Stav</dt>
+                                <dd class="col-sm-8"> book.isbn_number }}</dd>
+                                <dt class="col-sm-4">ZStart date</dt>
+                                <dd class="col-sm-8"> {{ project.start_date }}</dd>
+                                <dt class="col-sm-4">Description</dt>
+                                <dd class="col-sm-8"> {{project.description}} </dd>
+                            </dl>
+                            <dl class="col-sm-6 row">
+                                <dt class="col-sm-4">Project manager</dt>
+                                <dd class="col-sm-8"> {{ project.project_manager }}</dd>
+                                <dt class="col-sm-4">End date</dt>
+                                <dd class="col-sm-8"> {{ project.estimated_end_date }}</dd>
+
+                            </dl>
+
+                        </div>
+                        <div class="float-right d-inline">
+                            <button type="button" class="btn btn-danger">Deaktivate</button>
+                            <button type="button" class="btn btn-primary">Edit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="card-title col-3">Phases </h5>
+                            <div class="col-9">
+                                <button type="button" class="float-right d-inline btn btn-success">
+                                    <a href="{% url 'project-phase-create' object.pk %}">Create Phase</a>
+                                </button>
+                               <!-- <div class="modal fade" id="theModal">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            {% include 'manager_customer_project_form.html' %}
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Názov etapy</th>
+                                        <th scope="col">Manažér etapy</th>
+                                        <th scope="col">Začiatok etapy</th>
+                                        <th scope="col">Ukončenie etapy</th>
+                                        <th scope="col">Stav</th>
+                                        <th scope="col"> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for phase in phases %}
+                                    <tr>
+                                        <td><a href="{% url 'project-phase-detail' object.pk phase.pk %}">{{ phase.name }}</a></td>
+                                        <td><!----></td>
+                                        <td><!----></td>
+                                        <td><!----></td>
+                                        <td><!----></td>
+                                        <td><li> <a href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li></td>
+                                    </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="card-title col-3">Customers </h5>
+                            <div class="col-9">
+                                <button type="button" class="float-right d-inline btn btn-success">Pridať užívateľa</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Meno</th>
+                                        <th scope="col">Priezvisko</th>
+                                        <th scope="col">Prihlasovacie meno</th>
+                                        <th scope="col">Rola</th>
+                                        <th scope="col"> </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td> <li>{{ user.username }}</li></td>
+                                        <td><!----></td>
+                                        <td><!----></td>
+                                        <td><!----></td>
+                                        <td><!----></td>
+
+                                    </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        {% endblock projekt-div %}
+        </div>
+
     </div>
-    <h4>Phases</h4>
-    <ul>
-    {% for phase in phases %}
-        <li><a href="{% url 'project-phase-detail' object.pk phase.pk %}">{{ phase.name }}</a> - <a href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li>
-    {% endfor %}
-    </ul>
-    <h4>Customers</h4>
-    <ul>
-    {% for user in users %}
-        <li>{{ user.username }}</li>
-    {% endfor %}
-    </ul>
+</div>
 {% endblock content %}

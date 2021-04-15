@@ -1,8 +1,109 @@
-{% extends 'base.html' %}
+{% extends 'project_detail.html' %}
 {% block title %}Phase Detail{% endblock title %}
-{% block content %}
-    <p>{{ object.name }}</p>
-    <div>
-        <a href="{% url 'risk-create' project_id object.pk %}">Create Risk</a>
+{% block projekt-div %}
+    <div class="bg-light col-10">
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="card-title">Phase detail</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <dl class="col-sm-6 row">
+                        <dt class="col-sm-4">Phase name</dt>
+                        <dd class="col-sm-8"> {{ object.name }}</dd>
+                        <dt class="col-sm-4">State</dt>
+                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+                        <dt class="col-sm-4">Start date</dt>
+                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+                        <dt class="col-sm-4">Description</dt>
+                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+                    </dl>
+                    <dl class="col-sm-6 row">
+                        <dt class="col-sm-4">Phase manager</dt>
+                        <dd class="col-sm-8"> book.name }}</dd>
+                        <dt class="col-sm-4">End date</dt>
+                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+
+                    </dl>
+
+                </div>
+                <div class="float-right d-inline">
+                    <button type="button" class="btn btn-danger">Deaktivate</button>
+                    <button type="button" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-header">
+                <div class="row">
+                    <h5 class="card-title col-3">Risks</h5>
+                    <div class="col-9 ">
+                        <button type="button" class="float-right btn btn-success">
+                            <a href="{% url 'risk-create' project_id object.pk %}">Create Risk</a>
+                        </button>
+                         <!--  <div class="modal fade" id="theModal">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                        <div class="form-inline float-right">
+                            <div class="dropdown mr-2">
+                                <div class="form-inline">
+                                <label class="mr-2">Stav</label>
+                                <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                                    All
+                                </button>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                                    <button class="dropdown-item" type="button">Action</button>
+                                </div>
+                                </div>
+
+                            </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Risk name</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Threat</th>
+                                <th scope="col">Spúšťač</th>
+                                <th scope="col">Owner</th>
+                                <th scope="col">Risk</th>
+                                <th scope="col">Opatrenie</th>
+                                <th scope="col">State</th>
+                                <th scope="col">Change date</th>
+                                <th scope="col"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <!-- {% for book in books %} -->
+                            <tr>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                                <td><!----></td>
+                            </tr>
+                        <!-- {% endfor %} -->
+                        </tbody>
+                </table>
+
+            </div>
+        </div>
+
     </div>
-{% endblock content %}
+{% endblock  projekt-div %}
