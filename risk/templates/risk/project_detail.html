@@ -8,7 +8,7 @@
     <h4>Phases</h4>
     <ul>
     {% for phase in phases %}
-        <li><a href="{% url 'project-phase-detail' phase.pk %}">{{ phase.name }}</a> - <a href="{% url 'project-phase-update' phase.pk %}">Edit</a></li>
+        <li><a href="{% url 'project-phase-detail' object.pk phase.pk %}">{{ phase.name }}</a> - <a href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li>
     {% endfor %}
     </ul>
     <h4>Customers</h4>

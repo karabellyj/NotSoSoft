@@ -3,6 +3,6 @@
 {% block content %}
     <p>{{ object.name }}</p>
     <div>
-        <a href="{% url 'risk-create' object.pk %}">Create Risk</a>
+        <a href="{% url 'risk-create' project_id object.pk %}">Create Risk</a>
     </div>
 {% endblock content %}
