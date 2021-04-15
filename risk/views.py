@@ -170,7 +170,7 @@ class RiskUpdateView(PermissionRequiredMixin, UpdateView):
 
 class RiskDetailView(PermissionRequiredMixin, DetailView):
     model = Risk
-    template_name = "risk/risk-detail.html"
+    template_name = "risk/risk_detail.html"
     permission_required = ('risk.view_risk',)
 
     def get_context_data(self, **kwargs):

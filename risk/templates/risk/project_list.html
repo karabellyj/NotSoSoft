@@ -1,14 +1,84 @@
 {% extends 'base.html' %}
+
 {% block title %}Projects{% endblock title %}
 {% block content %}
-    {% if not user.is_superuser %}
-        <div>
-            <a href="{% url 'project-create' %}">Create Project</a>
+<div class="container-xl bg-light">
+    <div class="row justify-content-between pt-3">
+        <div class="col-4">
+            {% if not user.is_superuser %}
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#theModal">
+                <a class="text-white" href="{% url 'project-create' %}">Create Project</a>
+            </button>
+          <!--  <div class="modal fade" id="theModal">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        {% include 'manager_customer_project_form.html' %}
+                    </div>
+                </div>
+            </div>-->
+            <div>
+
+            </div>
+            {% endif %}
         </div>
-    {% endif %}
-    <ul>
-    {% for project in object_list %}
-    <li><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a> - <a href="{% url 'project-update' project.pk %}">Edit</a></li>
-    {% endfor %}
-    </ul>
+        <div class="col-5 ">
+            <div class="input-group float-right">
+                <div class="form-inline">
+                    <div class="dropdown mr-2">
+                        <div class="form-inline">
+                          <label class="mr-2">Stav</label>
+                          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                            Všetky
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                            <button class="dropdown-item" type="button">Action</button>
+
+                          </div>
+                        </div>
+
+                      </div>
+                  <input class="form-control" type="search"  placeholder="Search" aria-label="Search" />
+                  <button type="button" class="btn btn-primary">
+                    Vyhľadať
+                  </button>
+                </div>
+            </div>
+        </div>
+      </div>
+      <table class="table mt-3">
+        <tr>
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Project name</th>
+                    <th scope="col">Project manager</th>
+                    <th scope="col">Start date</th>
+                    <th scope="col">End date</th>
+                    <th scope="col">State</th>
+                    <th scope="col"> </th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for project in object_list %}
+                <tr>
+                    <td><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a></td>
+                    <td>{{ project.project_manager }}</td>
+                    <td>{{ project.start_date }}</td>
+                    <td> {{ project.estimated_end_date }}</td>
+                    <td><!----></td>
+                    <td>
+                        <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button>
+                    </td>
+                </tr>
+               {% endfor %}
+            </tbody>
+    </table>
+</div>
 {% endblock content %}
+
+
+
+  <!--  <ul>
+    {% for project in object_list %}
+    <li><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a> - </li>
+    {% endfor %}
+    </ul>-->
