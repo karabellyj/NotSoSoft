@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Projects{% endblock title %}
 {% block content %}
-    <div>
-        <a href="{% url 'project-create' %}">Create Project</a>
-    </div>
+    {% if not user.is_superuser %}
+        <div>
+            <a href="{% url 'project-create' %}">Create Project</a>
+        </div>
+    {% endif %}
     <ul>
     {% for project in object_list %}
     <li><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a> - <a href="{% url 'project-update' project.pk %}">Edit</a></li>
