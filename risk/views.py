@@ -101,6 +101,11 @@ class ProjectPhaseUpdateView(UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project_id'] = self.kwargs['project_id']
+        return context
+
 
 class ProjectPhaseDetailView(DetailView):
     model = ProjectPhase
@@ -109,6 +114,7 @@ class ProjectPhaseDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["risks"] = Risk.objects.filter(project_phase=context['object'])
+        context['project_id'] = self.kwargs['project_id']
         return context
 
 
@@ -129,6 +135,7 @@ class RiskCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['project_id'] = self.kwargs['project_id']
         context['phase_id'] = self.kwargs['phase_id']
         return context
 
@@ -143,7 +150,29 @@ class RiskUpdateView(UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project_id'] = self.kwargs['project_id']
+        context['phase_id'] = self.kwargs['phase_id']
+        return context
+
 
 class RiskDetailView(DetailView):
     model = Risk
     template_name = "risk/risk-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project_id'] = self.kwargs['project_id']
+        context['phase_id'] = self.kwargs['phase_id']
+        return context
+
+
+class RiskListView(ListView):
+    model = Risk
+    template_name = "risk/risk-register.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project_id'] = self.kwargs['project_id']
+        return context
