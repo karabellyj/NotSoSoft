@@ -1,0 +1,5 @@
+<form action="{% url 'project-phase-create' project_id %}" method="post">
+{% csrf_token %}
+{{ form.as_ul }}
+<button type="submit">Send</button>
+</form>
