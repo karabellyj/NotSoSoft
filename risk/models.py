@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class Company(models.Model):
@@ -16,12 +17,32 @@ class Company(models.Model):
 
 
 class Risk(models.Model):
+
+    class State(models.TextChoices):
+        ACTIVE = 'Active', _('Aktivne')
+        CLOSED = 'Closed', _('Uzatovrene')
+        HAPPENED = 'Happened', _('Prihodilo sa')
+
+    class Impact(models.TextChoices):
+        VVD = 'VVD', _('Velmi velký dopad na projekt')
+        VD = 'VD', _('Velký dopad na projekt')
+        SD = 'SD', _('Střední dopad na projekt')
+        MD = 'MD', _('Malý dopad na projekt')
+        VMD = 'VMD', _('Velmi malý dopad na projekt')
+
+    class Probability(models.TextChoices):
+        VVP = 'VVP', _('Velmi vysoká pravděpodobnost')
+        VP = 'VP', _('Vysoká pravděpodobnost')
+        SP = 'SP', _('Střední pravděpodobnost')
+        NP = 'NP', _('Nízká pravděpodobnost')
+        VNP = 'VNP', _('Velmi nízká pravděpodobnost')
+
     risk_assignee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project_phase = models.ForeignKey('ProjectPhase', on_delete=models.CASCADE)
     risk_type = models.ForeignKey('RiskType', on_delete=models.CASCADE)
-    risk_impacts = models.ForeignKey('RiskImpact', on_delete=models.CASCADE)
-    risk_state = models.ForeignKey('RiskState', on_delete=models.CASCADE)
-    risk_probability = models.ForeignKey('RiskProbability', on_delete=models.CASCADE)
+    impact = models.CharField(max_length=3, choices=Impact.choices, default=Impact.VMD)
+    state = models.CharField(max_length=20, choices=State.choices, default=State.HAPPENED)
+    probability = models.CharField(max_length=3, choices=Probability.choices, default=Probability.VNP)
 
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
@@ -49,25 +70,16 @@ class Project(models.Model):
         return self.name
 
 
-class RiskProbability(models.Model):
-    name = models.CharField(max_length=60)
-
-
 class RiskType(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 
 class RiskSubtype(models.Model):
     risk_type = models.ForeignKey('RiskType', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-
-
-class RiskState(models.Model):
-    name = models.CharField(max_length=60)
-
-
-class RiskImpact(models.Model):
-    impacts = models.CharField(max_length=60)
 
 
 class ProjectPhase(models.Model):
