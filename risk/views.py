@@ -1,6 +1,7 @@
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.urls import reverse_lazy
 from django.views.generic import (CreateView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
@@ -17,9 +18,10 @@ class HomeView(TemplateView):
 
 class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateProjectForm
-    template_name = "risk/project_change.html"
+    template_name = "risk/project_create.html"
     success_message = 'Success: Project was created.'
     permission_required = ('risk.add_project',)
+    success_url = reverse_lazy('project-list')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

@@ -2,26 +2,22 @@
 
 {% block title %}Projects{% endblock title %}
 {% block content %}
-<div class="container-xl bg-light">
-    <div class="row justify-content-between pt-3">
-        <div class="col-4">
-            {% if not user.is_staff %}
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#theModal">
-                <a class="text-white" href="{% url 'project-create' %}">Create Project</a>
-            </button>
-          <!--  <div class="modal fade" id="theModal">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        {% include 'manager_customer_project_form.html' %}
-                    </div>
-                </div>
-            </div>-->
-            <div>
 
+<div class="container-xl justifi bg-light">
+    <div class="row pt-3">
+        <div class="col-3">
+            {% if not user.is_staff %}
+            <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content"></div>
+                </div>
             </div>
+            <button id="create-project" class="btn btn-success" type="button" name="button">Create Project</button>
+
+
             {% endif %}
         </div>
-        <div class="col-5 ">
+        <div class="col-9">
             <div class="input-group float-right">
                 <div class="form-inline row">
                     <div class="dropdown mr-2">
@@ -36,7 +32,8 @@
                           </div>
                         </div>
 
-                      </div>
+                    </div>
+
                   <input class="form-control" type="search"  placeholder="Search" aria-label="Search" />
                   <button type="button" class="btn btn-primary ml-2">
                     Vyhľadať
@@ -66,16 +63,36 @@
                     <td> {{ project.estimated_end_date }}</td>
                     <td><!----></td>
                     <td>
-                        <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button>
+                        <button type="button" class="update-project btn btn-sm btn-warning" data-form-url="{% url 'project-update' project.pk %}">
+                            <span class="fa fa-pencil"></span>
+                          </button>
+                     <!-- <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button> -->
                     </td>
                 </tr>
                {% endfor %}
             </tbody>
     </table>
+
+
 </div>
 {% endblock content %}
 
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
 
+        $("#create-project").modalForm({
+            formURL: "{% url 'project-create' %}"
+        });
+
+
+
+    });
+
+    </script>
+
+{% endblock js %}
 
   <!--  <ul>
     {% for project in object_list %}
