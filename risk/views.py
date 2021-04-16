@@ -231,3 +231,22 @@ class RiskListView(PermissionRequiredMixin, ListView):
         if state:
             qs = qs.filter(state=state)
         return qs
+
+
+class MatrixView(TemplateView):
+    template_name = 'risk/matrix.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        project_id = self.kwargs['project_id']
+
+        risks = Risk.objects.filter(project_phase__project=project_id).all()
+        matrix = dict(zip(map(lambda x: x[0], Risk.Probability.choices), [[[]] * len(Risk.Impact)] * len(Risk.Probability)))
+        impacts_to_id = dict(zip(map(lambda x: x[0], Risk.Impact.choices), range(0, len(Risk.Impact))))
+
+        for risk in risks:
+            matrix[risk.probability][impacts_to_id[risk.impact]].append(risk)
+
+        context['matrix'] = matrix
+        context['impacts'] = impacts_to_id.keys()
+        return context
