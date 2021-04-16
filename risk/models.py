@@ -4,6 +4,35 @@ from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 
+class ActiveQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+    def inactive(self):
+        return self.filter(is_active=False)
+
+    def delete(self):
+        self.update(is_active=False)
+
+
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        return ActiveQuerySet(self.model, using=self._db)
+
+
+class ActiveModel(models.Model):
+    is_active = models.BooleanField(default=True, editable=False)
+
+    objects = ActiveManager()
+
+    class Meta:
+        abstract = True
+
+    def delete(self):
+        self.is_active = False
+        self.save()
+
+
 class Company(models.Model):
     name = models.CharField(max_length=255)
     logo = models.BinaryField()
@@ -58,7 +87,7 @@ class Risk(models.Model):
         return reverse('project-phase-detail', kwargs={'project_id': self.project_phase.project.pk, 'pk': self.project_phase.pk})
 
 
-class Project(models.Model):
+class Project(ActiveModel):
     project_manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects')
     company = models.ForeignKey('Company', on_delete=models.CASCADE)
     customers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
@@ -88,7 +117,7 @@ class RiskSubtype(models.Model):
     name = models.CharField(max_length=255)
 
 
-class ProjectPhase(models.Model):
+class ProjectPhase(ActiveModel):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     start_date = models.DateField()

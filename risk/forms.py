@@ -1,5 +1,4 @@
 from bootstrap_modal_forms.forms import BSModalModelForm
-from django import forms
 from django.forms import DateTimeInput, HiddenInput
 
 from users.utils import (get_customers_qs, get_phase_manager_qs,
@@ -36,7 +35,7 @@ class UpdateProjectForm(BSModalModelForm):
         fields = ('name', 'description', 'start_date', 'real_end', 'estimated_end_date', 'customers')
 
 
-class CreateProjectPhaseForm(forms.ModelForm):
+class CreateProjectPhaseForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -52,7 +51,7 @@ class CreateProjectPhaseForm(forms.ModelForm):
         }
 
 
-class UpdateProjectPhaseForm(forms.ModelForm):
+class UpdateProjectPhaseForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -64,7 +63,7 @@ class UpdateProjectPhaseForm(forms.ModelForm):
         fields = ('name', 'description', 'start_date', 'real_end_date', 'estimated_end_date', 'phase_manager')
 
 
-class CreateRiskForm(forms.ModelForm):
+class CreateRiskForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -79,7 +78,7 @@ class CreateRiskForm(forms.ModelForm):
         }
 
 
-class UpdateRiskForm(forms.ModelForm):
+class UpdateRiskForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
