@@ -38,16 +38,13 @@
                 <div class="row">
                     <h5 class="card-title col-3">Risks</h5>
                     <div class="col-9 ">
-                        <button type="button" class="float-right btn btn-success">
-                            <a href="{% url 'risk-create' project_id object.pk %}">Create Risk</a>
-                        </button>
-                         <!--  <div class="modal fade" id="theModal">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
+                        <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content"></div>
+                            </div>
+                        </div>
+                        <button id="create-risk" class="btn btn-success" type="button" name="button">Create Project</button>
 
-                                        </div>
-                                    </div>
-                                </div> -->
 
                         <div class="form-inline float-right">
                             <div class="dropdown mr-2">
@@ -107,3 +104,17 @@
 
     </div>
 {% endblock %}
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#create-risk").modalForm({
+            formURL: "{% url 'risk-create' %}"
+        });
+    });
+
+    </script>
+
+{% endblock js %}

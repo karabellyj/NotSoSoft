@@ -2,7 +2,7 @@
     {% csrf_token %}
 
    <div class="modal-header">
-      <h5 class="modal-title">Create new Phase</h5>
+      <h5 class="modal-title">Create new Project</h5>
 
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -10,7 +10,7 @@
     </div>
 
     <div class="modal-body">
-        {% for hidden_field in sform.hidden_fields %}
+        {% for hidden_field in form.hidden_fields %}
             {{ hidden_field }}
             {% endfor %}
 
@@ -24,7 +24,17 @@
             <label for="{{ form.name.id_for_label }}">Project name:</label>
             <input class="form-control" type="text" name="name" id="form.name.id_for_label" required>
         </div>
+        <div class="fieldWrapper">
+            {{ form.customers.errors }}
 
+            <label for="{{ form.customers.id_for_label }}">Customers:</label>
+
+           <select class="selectpicker mt-3" multiple data-live-search="true" id=" form.customers.id_for_label">
+               {% for customer in form.customers %}
+                    <option value="{{ customer.pk }}">{{customer.name}}</option>
+                {% endfor %}
+             </select>
+        </div>
         <div class="fieldWrapper">
             {{ form.description.errors }}
             <label for="{{ form.description.id_for_label }}">Description:</label>
@@ -50,6 +60,16 @@
             <input class="form-control" type="datetime" name="est_end_date" id="form.estimated_end_date.id_for_label" >
         </div>
 
+
+    <!-- {% for field in form %}
+        <div class="form-group{% if field.errors %} invalid{% endif %}">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}-->
     </div>
 
     <div class="modal-footer">
@@ -58,3 +78,16 @@
     </div>
 
   </form>
+
+  {% block js %}
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+
+          $('select').selectpicker();
+
+      });
+
+      </script>
+
+  {% endblock js %}

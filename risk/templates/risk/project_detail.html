@@ -59,16 +59,14 @@
                         <div class="row">
                             <h5 class="card-title col-3">Phases </h5>
                             <div class="col-9">
-                                <button type="button" class="float-right d-inline btn btn-success">
-                                    <a href="{% url 'project-phase-create' object.pk %}">Create Phase</a>
-                                </button>
-                               <!-- <div class="modal fade" id="theModal">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            {% include 'manager_customer_project_form.html' %}
-                                        </div>
+                                <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content"></div>
                                     </div>
-                                </div> -->
+                                </div>
+                                <button id="create-phase" class="btn btn-success" type="button" name="button">Create Project</button>
+
+
 
                             </div>
                         </div>
@@ -151,3 +149,17 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#create-phase").modalForm({
+            formURL: "{% url 'project-phase-create' %}"
+        });
+    });
+
+    </script>
+
+{% endblock js %}

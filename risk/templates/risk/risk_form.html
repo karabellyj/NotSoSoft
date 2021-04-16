@@ -1,5 +1,131 @@
-<form action="{% url 'risk-create' project_id phase_id %}" method="post">
+<form method="post" action="">
     {% csrf_token %}
-    {{ form.as_ul }}
-    <button type="submit">Send</button>
-</form>
+
+   <div class="modal-header">
+      <h5 class="modal-title">Create new Phase</h5>
+
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+        {% for hidden_field in sform.hidden_fields %}
+            {{ hidden_field }}
+            {% endfor %}
+
+        {{ form.non_field_errors }}
+
+
+
+        <div class="fieldWrapper">
+            {{ form.risk_assignee.errors }}
+            <label for="{{ form.risk_assignee.id_for_label }}">Zodpovedná osoba:</label>
+            <select class="custom-select mr-sm-2" id="form.risk_assignee.id_for_label">
+                <option selected>Choose...</option>
+                {% for cust in form.risk_assignee %}
+                <option value="{{ cust.pk }}" >{{ cust.name }}</option>
+                {% endfor %}
+              </select>
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.risk_type.errors }}
+            <label for="{{ form.risk_type.id_for_label }}">Project name:</label>
+            <select class="custom-select mr-sm-2" id="form.risk_assignee.id_for_label">
+                <option selected>Choose...</option>
+                {% for risk_t in form.risk_type %}
+                <option value="{{ risk_t.pk }}" >{{ risk_t.name }}</option>
+                {% endfor %}
+              </select>
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.impact.errors }}
+            <label for="{{ form.impact.id_for_label }}">Project name:</label>
+            <select class="custom-select mr-sm-2" id="form.impact.id_for_label">
+                <option selected>Choose...</option>
+                {% for imp in form.impact %}
+                <option value="{{ imp.pk }}" >{{ imp.name }}</option>
+                {% endfor %}
+              </select>
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.probability.errors }}
+            <label for="{{ form.probability.id_for_label }}">Project name:</label>
+            <select class="custom-select mr-sm-2" id="form.probability.id_for_label">
+                <option selected>Choose...</option>
+                {% for prob in form.probability %}
+                <option value="{{ prob.pk }}" >{{ prob.name }}</option>
+                {% endfor %}
+              </select>
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.name.errors }}
+            <label for="{{ form.name.id_for_label }}">Project name:</label>
+            <input class="form-control" type="text" name="name" id="form.name.id_for_label" required>
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.description.errors }}
+            <label for="{{ form.description.id_for_label }}">Description:</label>
+            <textarea class="form-control" id=" form.description.id_for_label" rows="3"></textarea>
+
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.threat.errors }}
+            <label for="{{ form.threat.id_for_label }}">Description:</label>
+            <textarea class="form-control" id=" form.threat.id_for_label" rows="3"></textarea>
+
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.starter.errors }}
+            <label for="{{ form.starter.id_for_label }}">Description:</label>
+            <textarea class="form-control" id=" form.starter.id_for_label" rows="3"></textarea>
+
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.reactions.errors }}
+            <label for="{{ form.reactions.id_for_label }}">Description:</label>
+            <textarea class="form-control" id=" form.reactions.id_for_label" rows="3"></textarea>
+
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.comment.errors }}
+            <label for="{{ form.comment.id_for_label }}">Description:</label>
+            <textarea class="form-control" id=" form.comment.id_for_label" rows="3"></textarea>
+
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.start_date.errors }}
+            <label for="{{ form.start_date.id_for_label }}">Start date:</label>
+            <input class="form-control" type="date" name="start_date" id="form.start_date.id_for_label" required>
+        </div>
+
+        <div class="fieldWrapper">
+            {{ form.real_end.errors }}
+            <label for="{{ form.real_end.id_for_label }}">Real end date:</label>
+            <input class="form-control" type="date" name="end_date" id="form.real_end.id_for_label" >
+
+        </div>
+        <div class="fieldWrapper">
+            {{ form.estimated_end_date.errors }}
+            <label for="{{ form.estimated_end_date.id_for_label }}">End date</label>
+            <input class="form-control" type="datetime" name="est_end_date" id="form.estimated_end_date.id_for_label" >
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-success">Create</button>
+    </div>
+
+  </form>
