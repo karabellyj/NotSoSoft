@@ -5,7 +5,7 @@
 <div class="container-xl bg-light">
     <div class="row justify-content-between pt-3">
         <div class="col-4">
-            {% if not user.is_superuser %}
+            {% if not user.is_staff %}
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#theModal">
                 <a class="text-white" href="{% url 'project-create' %}">Create Project</a>
             </button>
