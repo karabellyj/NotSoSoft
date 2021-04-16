@@ -2,6 +2,8 @@ from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 from django.views.generic import (CreateView, DetailView, ListView,
                                   TemplateView, UpdateView)
 
@@ -55,6 +57,16 @@ class ProjectListView(ListView):
     def get_queryset(self):
         qs = super().get_queryset()
         user = self.request.user
+        q = self.request.GET.get('q')
+        active = self.request.GET.get('active')
+
+        if q:
+            qs = qs.filter(name__istartswith=q)
+        if active:
+            if active is True:
+                qs = qs.active()
+            else:
+                qs = qs.inactive()
 
         if is_company_manager(user):
             return qs.filter(company=user.company)
@@ -72,11 +84,26 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        phase_state = self.request.GET.get('state')
+        q = self.request.GET.get('q')
+        role = self.request.GET.get('role')
+
         context['phases'] = ProjectPhase.objects.filter(project=context['object'])
+        if phase_state:
+            if phase_state is True:
+                context['phases'] = context['phases'].active()
+            else:
+                context['phases'] = context['phases'].inactive()
 
         project_manager = get_user_model().objects.filter(pk=self.object.project_manager.pk)
         phase_managers = get_user_model().objects.filter(pk__in=self.object.projectphase_set.values_list('phase_manager', flat=True).distinct())
         context['users'] = context['object'].customers.all() | project_manager | phase_managers
+        if q:
+            context['users'] = context['users'].annotate(fullname=Concat(
+                'first_name', Value(' '), 'last_name')).filter(Q(fullname__istartswith=q) | Q(fullname__icontains=q))
+        if role:
+            context['users'] = context['users'].filter(groups__name=role)
+
         return context
 
 
@@ -126,8 +153,14 @@ class ProjectPhaseDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        state = self.request.GET.get('state')
+
         context["risks"] = Risk.objects.filter(project_phase=context['object'])
+        if state:
+            context['risks'] = context['risks'].filter(state=state)
+
         context['project_id'] = self.kwargs['project_id']
+        context['states'] = Risk.State.choices
         return context
 
 
@@ -193,3 +226,11 @@ class RiskListView(PermissionRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['project_id'] = self.kwargs['project_id']
         return context
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        state = self.request.GET.get('state')
+
+        if state:
+            qs = qs.filter(state=state)
+        return qs
