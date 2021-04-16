@@ -3,8 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
-from django.views.generic import (CreateView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.views.generic import DetailView, ListView, TemplateView
 
 from users.utils import is_company_manager, is_customer, is_project_manager
 
@@ -105,7 +104,7 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class ProjectPhaseCreateView(PermissionRequiredMixin, CreateView):
+class ProjectPhaseCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateProjectPhaseForm
     template_name = "risk/project_phase_form.html"
     permission_required = ('risk.add_projectphase',)
@@ -127,7 +126,7 @@ class ProjectPhaseCreateView(PermissionRequiredMixin, CreateView):
         return context
 
 
-class ProjectPhaseUpdateView(PermissionRequiredMixin, UpdateView):
+class ProjectPhaseUpdateView(PermissionRequiredMixin, BSModalUpdateView):
     model = ProjectPhase
     form_class = UpdateProjectPhaseForm
     template_name = "risk/project_phase_change.html"
@@ -162,7 +161,7 @@ class ProjectPhaseDetailView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class RiskCreateView(PermissionRequiredMixin, CreateView):
+class RiskCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateRiskForm
     template_name = 'risk/risk_form.html'
     permission_required = ('risk.add_risk',)
@@ -185,7 +184,7 @@ class RiskCreateView(PermissionRequiredMixin, CreateView):
         return context
 
 
-class RiskUpdateView(PermissionRequiredMixin, UpdateView):
+class RiskUpdateView(PermissionRequiredMixin, BSModalUpdateView):
     model = Risk
     form_class = UpdateRiskForm
     template_name = "risk/risk-change.html"
