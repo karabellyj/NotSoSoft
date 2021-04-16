@@ -4,7 +4,8 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
-from django.views.generic import DetailView, ListView, TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, DetailView, ListView, TemplateView
 
 from users.utils import is_company_manager, is_customer, is_project_manager
 
@@ -57,22 +58,22 @@ class ProjectListView(ListView):
         qs = super().get_queryset()
         user = self.request.user
         q = self.request.GET.get('q')
-        active = self.request.GET.get('active')
+        active = self.request.GET.get('active', 'true')
+
+        if is_company_manager(user):
+            qs = qs.filter(company=user.company)
+        elif is_project_manager(user):
+            qs = qs.filter(project_manager=user)
+        elif is_customer(user):
+            qs = qs.filter(customers__in=[user.pk])
 
         if q:
             qs = qs.filter(name__istartswith=q)
-        if active:
-            if active is True:
-                qs = qs.active()
-            else:
-                qs = qs.inactive()
+        if active == 'true':
+            qs = qs.active()
+        if active == 'false':
+            qs = qs.inactive()
 
-        if is_company_manager(user):
-            return qs.filter(company=user.company)
-        elif is_project_manager(user):
-            return qs.filter(project_manager=user)
-        elif is_customer(user):
-            return qs.filter(customers__in=[user.pk])
         return qs
 
 
@@ -83,16 +84,15 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        phase_state = self.request.GET.get('state')
+        active = self.request.GET.get('active', 'true')
         q = self.request.GET.get('q')
         role = self.request.GET.get('role')
 
         context['phases'] = ProjectPhase.objects.filter(project=context['object'])
-        if phase_state:
-            if phase_state is True:
-                context['phases'] = context['phases'].active()
-            else:
-                context['phases'] = context['phases'].inactive()
+        if active == 'true':
+            context['phases'] = context['phases'].active()
+        elif active == 'false':
+            context['phases'] = context['phases'].inactive()
 
         project_manager = get_user_model().objects.filter(pk=self.object.project_manager.pk)
         phase_managers = get_user_model().objects.filter(pk__in=self.object.projectphase_set.values_list('phase_manager', flat=True).distinct())
@@ -104,6 +104,12 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
             context['users'] = context['users'].filter(groups__name=role)
 
         return context
+
+
+class ProjectDeleteView(DeleteView):
+    model = Project
+    template_name = "risk/project_confirm_delete.html"
+    success_url = reverse_lazy('project-list')
 
 
 class ProjectPhaseCreateView(PermissionRequiredMixin, BSModalCreateView):
@@ -163,10 +169,21 @@ class ProjectPhaseDetailView(PermissionRequiredMixin, DetailView):
         return context
 
 
+class ProjectPhaseDeleteView(DeleteView):
+    model = ProjectPhase
+    template_name = 'risk/project_phase_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy('project-detail', kwargs={'pk': self.kwargs['project_id']})
+
+
 class RiskCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateRiskForm
     template_name = 'risk/risk_form.html'
     permission_required = ('risk.add_risk',)
+
+    def get_success_url(self):
+        return reverse_lazy('project-phase-detail', kwargs={'project_id': self.kwargs['project_id'], 'pk': self.kwargs['phase_id']})
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -233,6 +250,14 @@ class RiskListView(PermissionRequiredMixin, ListView):
         if state:
             qs = qs.filter(state=state)
         return qs
+
+
+class RiskDeleteView(DeleteView):
+    model = Risk
+    template_name = "risk/risk_confirm_delete.html"
+
+    def get_success_url(self):
+        return reverse_lazy('project-phase-detail', kwargs={'project_id': self.kwargs['project_id'], 'pk': self.kwargs['phase_id']})
 
 
 class MatrixView(TemplateView):
