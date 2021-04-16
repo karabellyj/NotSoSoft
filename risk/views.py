@@ -1,3 +1,4 @@
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import (CreateView, DetailView, ListView,
@@ -14,9 +15,10 @@ class HomeView(TemplateView):
     template_name = 'home.html'
 
 
-class ProjectCreateView(PermissionRequiredMixin, CreateView):
+class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateProjectForm
     template_name = "risk/project_change.html"
+    success_message = 'Success: Project was created.'
     permission_required = ('risk.add_project',)
 
     def get_form_kwargs(self):
@@ -32,7 +34,7 @@ class ProjectCreateView(PermissionRequiredMixin, CreateView):
         return initial
 
 
-class ProjectUpdateView(PermissionRequiredMixin, UpdateView):
+class ProjectUpdateView(PermissionRequiredMixin, BSModalUpdateView):
     model = Project
     form_class = UpdateProjectForm
     template_name = "risk/project_change.html"
