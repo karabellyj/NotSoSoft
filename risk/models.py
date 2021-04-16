@@ -61,7 +61,7 @@ class Project(models.Model):
     customers = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
 
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     start_date = models.DateField()
     real_end = models.DateField(null=True, blank=True)
     estimated_end_date = models.DateField(null=True, blank=True)
