@@ -1,9 +1,10 @@
 from django.urls import path
 
-from .views import (ProjectCreateView, ProjectDetailView, ProjectListView,
-                    ProjectPhaseCreateView, ProjectPhaseDetailView,
-                    ProjectPhaseUpdateView, ProjectUpdateView, RiskCreateView,
-                    RiskDetailView, RiskListView, RiskUpdateView)
+from .views import (MatrixView, ProjectCreateView, ProjectDetailView,
+                    ProjectListView, ProjectPhaseCreateView,
+                    ProjectPhaseDetailView, ProjectPhaseUpdateView,
+                    ProjectUpdateView, RiskCreateView, RiskDetailView,
+                    RiskListView, RiskUpdateView)
 
 urlpatterns = [
     path('projects/', ProjectListView.as_view(), name='project-list'),
@@ -19,5 +20,7 @@ urlpatterns = [
     path('project/<int:project_id>/phase/<int:phase_id>/risk/<int:pk>/update', RiskUpdateView.as_view(), name='risk-update'),
     path('project/<int:project_id>/phase/<int:phase_id>/risk/<int:pk>/', RiskDetailView.as_view(), name='risk-detail'),
 
-    path('project/<int:project_id>/register/', RiskListView.as_view(), name='risk-register')
+    path('project/<int:project_id>/register/', RiskListView.as_view(), name='risk-register'),
+
+    path('project/<int:project_id>/matrix/', MatrixView.as_view(), name='matrix')
 ]

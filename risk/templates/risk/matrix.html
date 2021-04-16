@@ -1,0 +1,24 @@
+<table>
+<thead>
+<th></th>
+{% for impact in impacts %}
+    <th>{{ impact }}</th>
+{% endfor %}
+</thead>
+<tbody>
+{% for label, cols in matrix.items %}
+    <tr>
+        <th>{{ label }}</th>
+        {% for col in cols %}
+            <td>
+                <ul>
+                    {% for risk in col %}
+                        <li> {{ risk.name }} </li>
+                    {% endfor %}
+                </ul>
+            </td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</tbody>
+</table>
