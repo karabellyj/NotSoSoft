@@ -111,7 +111,7 @@
     $(document).ready(function() {
 
         $("#create-risk").modalForm({
-            formURL: "{% url 'risk-create' %}"
+            formURL: "{% url 'risk-create' project_id object.pk %}"
         });
     });
 
