@@ -22,9 +22,9 @@
                 </dl>
                 <dl class="col-sm-6 row">
                     <dt class="col-sm-4">Category</dt>
-                    <dd class="col-sm-8">{{object.risk_type}</dd>
+                    <dd class="col-sm-8">{{object.risk_type}}</dd>
                     <dt class="col-sm-4">State</dt>
-                    <dd class="col-sm-8">{{object.state}</dd>
+                    <dd class="col-sm-8">{{object.state}}</dd>
 
                 </dl>
 
@@ -40,16 +40,13 @@
             <div class="row">
                 <dl class="col-sm-6 row">
                     <dt class="col-sm-4">Probability</dt>
-                    <dd class="col-sm-8"> book.name }}</dd>
+                    <dd class="col-sm-8">{{object.probability}}</dd>
                     <dt class="col-sm-4">Risk</dt>
-                    <dd class="col-sm-8"> book.isbn_number }}</dd>
+                    <dd class="col-sm-8">{{object.state}</dd>
                 </dl>
                 <dl class="col-sm-6 row">
                     <dt class="col-sm-4">Impact</dt>
-                    <dd class="col-sm-8"> book.name }}</dd>
-                    <dt class="col-sm-4">End date</dt>
-                    <dd class="col-sm-8"> book.isbn_number }}</dd>
-
+                    <dd class="col-sm-8">{{object.impact}}</dd>
                 </dl>
 
             </div>
@@ -62,27 +59,34 @@
         <div class="card-body">
             <dl class="row">
                 <dt class="col-sm-4">Description</dt>
-                <dd class="col-sm-8"> book.name }}</dd>
+                <dd class="col-sm-8">{{object.description}}</dd>
+                <dt class="col-sm-4">Comment</dt>
+                <dd class="col-sm-8">{{object.comment}}</dd>
             </dl>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-2">
             <dt >Start date</dt>
-            <dd > book.name }}</dd>
+            <dd >{{object.start_date}}</dd>
         </div>
         <div class="col-2">
             <dt >Change date</dt>
-            <dd > book.name }}</dd>
+            <dd >{{object.state_change_date}}</dd>
         </div>
         <div class="col-2">
             <dt >Reaction date</dt>
-            <dd > book.name }}</dd>
+            <dd >{{object.reaction_date}}</dd>
         </div>
         <div class="col-6">
             <div  class="float-right">
-                <button type="button" class="btn btn-danger">Deaktivate</button>
-                <button type="button" class="btn btn-primary">Edit</button>
+                <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                    <div class="modal-dialog modal-xl" role="document">
+                      <div class="modal-content"></div>
+                    </div>
+                </div>
+                <button type="button" class="delete-risk btn btn-danger">Delete</button>
+                <button type="button" class="update-risk  btn btn-primary">Edit</button>
                 <button type="button" class="btn btn-warning">Print</button>
             </div>
         </div>
@@ -92,3 +96,23 @@
 
 </div>
 {% endblock projekt-div %}
+
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $(".update-risk").modalForm({
+            formURL: "{% url 'risk-update' project_id phase_id object.pk %}"
+        });
+
+        $(".delete-risk").modalForm({
+            formURL: "{% url 'risk-delete' project_id  phase_id object.pk %}"
+        });
+
+    });
+
+    </script>
+
+{% endblock js %}
