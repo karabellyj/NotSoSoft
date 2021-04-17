@@ -83,9 +83,6 @@ class Risk(models.Model):
     state_change_date = models.DateField(null=True, blank=True)
     reaction_date = models.DateField(null=True, blank=True)
 
-    def get_absolute_url(self):
-        return reverse('project-phase-detail', kwargs={'project_id': self.project_phase.project.pk, 'pk': self.project_phase.pk})
-
 
 class Project(ActiveModel):
     project_manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='projects')

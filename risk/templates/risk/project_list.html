@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="container-xl justifi bg-light">
-    <div class="row pt-3">
+    <div class=" row pt-3">
         <div class="col-3">
             {% if not user.is_staff %}
             <div class="modal fade" tabindex="-1" role="dialog" id="modal">
@@ -18,8 +18,8 @@
             {% endif %}
         </div>
         <div class="col-9">
-            <div class="input-group float-right">
-                <div class="form-inline row">
+            <div class="input-group ">
+                <div class="form-inline row float-right">
                     <div class="dropdown mr-2">
                         <div class="form-inline">
                           <label class="mr-2">Stav</label>
@@ -42,7 +42,7 @@
             </div>
         </div>
       </div>
-      <table class="table mt-3">
+      <table class="table mt-3" id="projects-table">
         <tr>
             <thead class="thead-light">
                 <tr>
@@ -63,10 +63,19 @@
                     <td> {{ project.estimated_end_date }}</td>
                     <td><!----></td>
                     <td>
-                        <button type="button" class="update-project btn btn-sm btn-warning" data-form-url="{% url 'project-update' project.pk %}">
-                            <span class="fa fa-pencil"></span>
-                          </button>
-                     <!-- <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button> -->
+                      <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content"></div>
+                        </div>
+                    </div>
+
+
+                    <button type="button" class="update-project btn btn-sm btn-success" data-form-url="{% url 'project-update' project.pk %}">
+                      <span class="fa fa-pencil">Edit</span>
+                    </button>
+                     <!--
+                       <button id="update-project" class="btn-success" type="button" name="button">Edit</button>
+                      <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button> -->
                     </td>
                 </tr>
                {% endfor %}
@@ -86,6 +95,23 @@
             formURL: "{% url 'project-create' %}"
         });
 
+
+        function UpdateProjectForm() {
+          $(".update-project").each(function () {
+            $(this).modalForm({
+              formURL: $(this).data("form-url"),
+              asyncUpdate: true,
+              asyncSettings: {
+                closeOnSubmit: false,
+                dataUrl: "project/",
+                dataElementId: "#projects-table",
+                dataKey: "table",
+                addModalFormFunction: UpdateProjectForm
+              }
+            });
+          });
+        }
+        UpdateProjectForm();
 
 
     });

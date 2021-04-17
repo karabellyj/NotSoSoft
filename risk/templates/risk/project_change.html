@@ -1,48 +1,81 @@
 <form method="post" action="">
-    {% csrf_token %}
+  {% csrf_token %}
 
-   <div class="modal-header">
-      <h5 class="modal-title">Create new Book</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
+ <div class="modal-header">
+    <h5 class="modal-title">Create new Project</h5>
 
-    <div class="modal-body">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
 
-
-        {{ form.non_field_errors }}
-        <div class="fieldWrapper">
-            {{ form.name.errors }}
-            <label for="{{ form.name.id_for_label }}">Názov projektu</label>
-            {{ form.name }}
-        </div>
-        <div class="fieldWrapper">
-            {{ form.description.errors }}
-            <label for="{{ form.description.id_for_label }}">Popis</label>
-            {{ form.description }}
-        </div>
-        <div class="fieldWrapper">
-            {{ form.start_date.errors }}
-            <label for="{{ form.start_date.id_for_label }}">Start date</label>
-            {{ form.start_date }}
-        </div>
-
-
-    <!--  {% for field in form %}
-        <div class="form-group{% if field.errors %} invalid{% endif %}">
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
-          {% for error in field.errors %}
-            <p class="help-block">{{ error }}</p>
+  <div class="modal-body">
+      {% for hidden_field in form.hidden_fields %}
+          {{ hidden_field }}
           {% endfor %}
-        </div>
-      {% endfor %}-->
-    </div>
 
-    <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary" data-dismiss="modal">Create</button>
-    </div>
+      {{ form.non_field_errors }}
 
-  </form>
+
+
+
+      <div class="fieldWrapper">
+          {{ form.name.errors }}
+          <label for="{{ form.name.id_for_label }}">Project name:</label>
+          <input class="form-control" type="text" name="name" id="form.name.id_for_label" placeholder="form.name.label" required>
+      </div>
+      <div class="fieldWrapper">
+          {{ form.customers.errors }}
+
+          <label for="{{ form.customers.id_for_label }}">Customers:</label>
+
+         <select class="selectpicker mt-3" multiple data-live-search="true" id=" form.customers.id_for_label">
+             {% for customer in form.customers %}
+                  <option value="{{ customer.pk }}">{{customer.name}}</option>
+              {% endfor %}
+           </select>
+      </div>
+      <div class="fieldWrapper">
+          {{ form.description.errors }}
+          <label for="{{ form.description.id_for_label }}">Description:</label>
+          <textarea class="form-control" id=" form.description.id_for_label" rows="3">{{project.description}}</textarea>
+
+      </div>
+
+      <div class="fieldWrapper">
+          {{ form.start_date.errors }}
+          <label for="{{ form.start_date.id_for_label }}">Start date:</label>
+          <input class="form-control" type="date" name="start_date" id="form.start_date.id_for_label"   placeholder="form.start_date.label" required>
+      </div>
+
+      <div class="fieldWrapper">
+          {{ form.real_end.errors }}
+          <label for="{{ form.real_end.id_for_label }}">Real end date:</label>
+          <input class="form-control" type="date" name="end_date" id="form.real_end.id_for_label"  placeholder="form.real_end.label" >
+
+      </div>
+      <div class="fieldWrapper">
+          {{ form.estimated_end_date.errors }}
+          <label for="{{ form.estimated_end_date.id_for_label }}">End date</label>
+          <input class="form-control" type="datetime" name="est_end_date" id="form.estimated_end_date.id_for_label"  placeholder="form.estimated_end_date.label" >
+      </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-success">Update</button>
+  </div>
+
+</form>
+
+{% block js %}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('select').selectpicker();
+
+    });
+
+    </script>
+
+{% endblock js %}
