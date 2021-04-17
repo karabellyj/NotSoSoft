@@ -3,8 +3,8 @@
 {% block title %}Projects{% endblock title %}
 {% block content %}
 
-<div class="container-xl justifi bg-light">
-    <div class=" row pt-3">
+<div class="container-xl bg-light">
+    <div class=" row  justify-content-between pt-3">
         <div class="col-3">
             {% if not user.is_staff %}
             <div class="modal fade" tabindex="-1" role="dialog" id="modal">
@@ -17,32 +17,34 @@
 
             {% endif %}
         </div>
-        <div class="col-9">
+        <div class="col-5">
             <div class="input-group ">
                 <div class="form-inline row float-right">
                     <div class="dropdown mr-2">
                         <div class="form-inline">
-                          <label class="mr-2">Stav</label>
+
                           <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-                            Všetky
+                            State
                           </button>
                           <div class="dropdown-menu" aria-labelledby="dropdownPhases">
-                            <button class="dropdown-item" type="button">Action</button>
-
+                            <a class="dropdown-item" type="button" href="?active">All</a>
+                            <a class="dropdown-item" type="button" href="?active=true">Active</a>
+                            <a class="dropdown-item" type="button" href="?active=false">Inactive</a>
                           </div>
                         </div>
 
                     </div>
-
-                  <input class="form-control" type="search"  placeholder="Search" aria-label="Search" />
-                  <button type="button" class="btn btn-primary ml-2">
-                    Vyhľadať
-                  </button>
+                  <form action="" method="GET">
+                    <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
+                    <button type="submit" class="btn btn-primary ml-2">
+                      Vyhľadať
+                    </button>
+                </form>
                 </div>
             </div>
         </div>
       </div>
-      <table class="table mt-3" id="projects-table">
+      <table class="table table-hover mt-3" id="projects-table">
         <tr>
             <thead class="thead-light">
                 <tr>
@@ -56,34 +58,42 @@
             </thead>
             <tbody>
               {% for project in object_list %}
-                <tr>
-                    <td><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a></td>
-                    <td>{{ project.project_manager }}</td>
-                    <td>{{ project.start_date }}</td>
-                    <td> {{ project.estimated_end_date }}</td>
-                    <td><!----></td>
+
+
+                <tr  data-href="{% url 'project-detail' project.pk %}">
+
+                    <td class='clickable-row' >{{ project.name }}</td>
+                    <td class='clickable-row'>{{ project.project_manager }}</td>
+                    <td class='clickable-row'>{{ project.start_date }}</td>
+                    <td class='clickable-row'> {{ project.estimated_end_date|default_if_none:"-" }}</td>
+                    <td class='clickable-row'>{{ project.is_active|yesno:"active,inactive"}}</td>
+
                     <td>
-                      <div class="modal fade" tabindex="-1" role="dialog" id="modal">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content"></div>
-                        </div>
-                    </div>
 
-
-                    <button type="button" class="update-project btn btn-sm btn-success" data-form-url="{% url 'project-update' project.pk %}">
+                    <button type="button" class="update-project btn btn-sm btn-warning" data-form-url="{% url 'project-update' project.pk %}">
                       <span class="fa fa-pencil">Edit</span>
                     </button>
+                    <button type="button" class="delete-project btn btn-sm btn-danger" data-form-url="{% url 'project-delete' project.pk %}">
+                      <span class="fa fa-pencil">Deactivate</span>
+                    </button>
+
                      <!--
+
+
                        <button id="update-project" class="btn-success" type="button" name="button">Edit</button>
                       <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button> -->
                     </td>
                 </tr>
-               {% endfor %}
+
+
+                {% endfor %}
             </tbody>
     </table>
 
 
 </div>
+
+
 {% endblock content %}
 
 {% block js %}
@@ -95,23 +105,27 @@
             formURL: "{% url 'project-create' %}"
         });
 
-
-        function UpdateProjectForm() {
-          $(".update-project").each(function () {
-            $(this).modalForm({
-              formURL: $(this).data("form-url"),
-              asyncUpdate: true,
-              asyncSettings: {
-                closeOnSubmit: false,
-                dataUrl: "project/",
-                dataElementId: "#projects-table",
-                dataKey: "table",
-                addModalFormFunction: UpdateProjectForm
-              }
-            });
+        $(".update-project").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
           });
-        }
-        UpdateProjectForm();
+        });
+
+        $(".delete-project").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
+          });
+        });
+
+        $(".table td.clickable-row").each(function() {
+            $(this).css("cursor","pointer").click(function() {
+              document.location = $(this).parent().data("href");
+            })
+        });
+
+
+
+
 
 
     });

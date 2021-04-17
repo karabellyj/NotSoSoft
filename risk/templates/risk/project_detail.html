@@ -88,8 +88,8 @@
                                         <td>{{phase.phase_manager.name}}</td>
                                         <td>{{phase.start_date }}</td>
                                         <td>{{ phase.estimated_end_date }}</td>
-                                        <td><!----></td>
-                                        <td><li> <a id="update-phase" href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li></td>
+                                        <td><!--                                        <td><li> <a id="update-phase" href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li></td>
+                                        --></td>
                                     </tr>
 
                                     {% endfor %}
@@ -145,11 +145,10 @@
 
     </div>
 </div>
-   <!--   $("#update-phase").modalForm({
-            formURL: "{% url 'project-phase-update' object.pk  %}"
-        });
-    });-->
+
 {% endblock content %}
+
+
 
 {% block js %}
     {{block.super}}
@@ -159,6 +158,6 @@
         $("#create-phase").modalForm({
             formURL: "{% url 'project-phase-create' object.pk  %}"
         });
-
+        });
     </script>
 {% endblock js %}
