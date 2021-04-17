@@ -152,14 +152,13 @@
 {% endblock content %}
 
 {% block js %}
-{{block.super}}
-<script type="text/javascript">
-    $(document).ready(function() {
+    {{block.super}}
+    <script type="text/javascript">
+        $(document).ready(function() {
 
-        $("#create-phase").modalForm({
-            formURL: "{% url 'project-phase-create' object.pk  %}"
+            $("#create-phase").modalForm({
+                formURL: "{% url 'project-phase-create' object.pk %}"
+            });
         });
-
     </script>
-
 {% endblock js %}
