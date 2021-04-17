@@ -2,7 +2,7 @@
   {% csrf_token %}
 
  <div class="modal-header">
-    <h5 class="modal-title">Create new Project</h5>
+    <h5 class="modal-title">Edit Project</h5>
 
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -16,48 +16,46 @@
 
       {{ form.non_field_errors }}
 
-
-
-
       <div class="fieldWrapper">
           {{ form.name.errors }}
           <label for="{{ form.name.id_for_label }}">Project name:</label>
-          <input class="form-control" type="text" name="name" id="form.name.id_for_label" placeholder="form.name.label" required>
+          <input class="form-control" type="text" name="name" id="{{form.name.id_for_label}}" value="{{object.name}}" required>
       </div>
       <div class="fieldWrapper">
           {{ form.customers.errors }}
 
           <label for="{{ form.customers.id_for_label }}">Customers:</label>
 
-         <select class="selectpicker mt-3" multiple data-live-search="true" id=" form.customers.id_for_label">
+         <select class="selectpicker mt-3" name="customers" multiple data-live-search="true" id="{{form.customers.id_for_label}}">
              {% for customer in form.customers %}
-                  <option value="{{ customer.pk }}">{{customer.name}}</option>
+
+
+                  <option value="{{ customer.pk }}" {% if customer in object.customers %} selected{% endif %}>{{customer}}</option>
               {% endfor %}
-           </select>
+        </select>
       </div>
       <div class="fieldWrapper">
           {{ form.description.errors }}
           <label for="{{ form.description.id_for_label }}">Description:</label>
-          <textarea class="form-control" id=" form.description.id_for_label" rows="3">{{project.description}}</textarea>
-
+          <textarea class="form-control" name="description" id="{{form.description.id_for_label}}" rows="3">{{object.description}}</textarea>
       </div>
 
       <div class="fieldWrapper">
           {{ form.start_date.errors }}
           <label for="{{ form.start_date.id_for_label }}">Start date:</label>
-          <input class="form-control" type="date" name="start_date" id="form.start_date.id_for_label"   placeholder="form.start_date.label" required>
+          <input class="form-control" type="date" name="start_date" id="{{form.start_date.id_for_label}}"   value="{{object.start_date|date:'Y-m-d'}}" required>
       </div>
 
       <div class="fieldWrapper">
           {{ form.real_end.errors }}
           <label for="{{ form.real_end.id_for_label }}">Real end date:</label>
-          <input class="form-control" type="date" name="end_date" id="form.real_end.id_for_label"  placeholder="form.real_end.label" >
+          <input class="form-control" type="date" name="end_date" id="{{form.real_end.id_for_label}}"  value="{{object.real_end|date:'Y-m-d'}}" >
 
       </div>
       <div class="fieldWrapper">
           {{ form.estimated_end_date.errors }}
           <label for="{{ form.estimated_end_date.id_for_label }}">End date</label>
-          <input class="form-control" type="datetime" name="est_end_date" id="form.estimated_end_date.id_for_label"  placeholder="form.estimated_end_date.label" >
+          <input class="form-control" type="date" name="est_end_date" id="{{form.estimated_end_date.id_for_label}}"  value="{{object.estimated_end_date|date:'Y-m-d'}}" >
       </div>
   </div>
 

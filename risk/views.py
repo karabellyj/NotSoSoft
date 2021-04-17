@@ -1,4 +1,6 @@
-from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView
+from bootstrap_modal_forms.generic import (BSModalCreateView,
+                                           BSModalDeleteView,
+                                           BSModalUpdateView)
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
@@ -110,10 +112,11 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class ProjectDeleteView(DeleteView):
+class ProjectDeleteView(BSModalDeleteView):
     model = Project
     template_name = "risk/project_confirm_delete.html"
     success_url = reverse_lazy('project-list')
+    success_message = "OK"
 
 
 class ProjectPhaseCreateView(PermissionRequiredMixin, BSModalCreateView):
