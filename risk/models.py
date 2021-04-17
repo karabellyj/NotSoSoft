@@ -99,7 +99,7 @@ class Project(ActiveModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('project-list')
+        return reverse('project-detail', kwargs={'pk': self.pk})
 
 
 class RiskType(models.Model):
