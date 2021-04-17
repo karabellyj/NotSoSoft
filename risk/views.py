@@ -89,6 +89,7 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['project_id'] = self.object.pk
         active = self.request.GET.get('active', 'true')
         q = self.request.GET.get('q')
         role = self.request.GET.get('role')
@@ -175,9 +176,10 @@ class ProjectPhaseDetailView(PermissionRequiredMixin, DetailView):
         return context
 
 
-class ProjectPhaseDeleteView(DeleteView):
+class ProjectPhaseDeleteView(BSModalDeleteView):
     model = ProjectPhase
     template_name = 'risk/project_phase_confirm_delete.html'
+    success_message = "OK"
 
     def get_success_url(self):
         return reverse_lazy('project-detail', kwargs={'pk': self.kwargs['project_id']})
