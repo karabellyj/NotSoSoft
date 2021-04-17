@@ -12,9 +12,9 @@
                   <div class="modal-content"></div>
                 </div>
             </div>
-            <button id="create-project" class="btn btn-success" type="button" name="button">Create Project</button>
-
-
+            {% if perms.risk.add_project %}
+              <button id="create-project" class="btn btn-success" type="button" name="button">Create Project</button>
+            {% endif %}
             {% endif %}
         </div>
         <div class="col-5">
@@ -69,13 +69,16 @@
                     <td class='clickable-row'>{{ project.is_active|yesno:"active,inactive"}}</td>
 
                     <td>
-
-                    <button type="button" class="update-project btn btn-sm btn-warning" data-form-url="{% url 'project-update' project.pk %}">
-                      <span class="fa fa-pencil">Edit</span>
-                    </button>
-                    <button type="button" class="delete-project btn btn-sm btn-danger" data-form-url="{% url 'project-delete' project.pk %}">
-                      <span class="fa fa-pencil">Deactivate</span>
-                    </button>
+                    {% if perms.risk.change_project %}
+                      <button type="button" class="update-project btn btn-sm btn-warning" data-form-url="{% url 'project-update' project.pk %}">
+                        <span class="fa fa-pencil">Edit</span>
+                      </button>
+                    {% endif %}
+                    {% if perms.risk.delete_project %}
+                      <button type="button" class="delete-project btn btn-sm btn-danger" data-form-url="{% url 'project-delete' project.pk %}">
+                        <span class="fa fa-pencil">Deactivate</span>
+                      </button>
+                    {% endif %}
 
                      <!--
 
@@ -100,22 +103,25 @@
 {{block.super}}
 <script type="text/javascript">
     $(document).ready(function() {
-
-        $("#create-project").modalForm({
+        {% if perms.risk.create_project %}
+          $("#create-project").modalForm({
             formURL: "{% url 'project-create' %}"
-        });
-
-        $(".update-project").each(function () {
-          $(this).modalForm({
-            formURL: $(this).data("form-url"),
           });
-        });
-
-        $(".delete-project").each(function () {
-          $(this).modalForm({
-            formURL: $(this).data("form-url"),
+        {% endif %}
+        {% if perms.risk.change_project %}
+          $(".update-project").each(function () {
+            $(this).modalForm({
+              formURL: $(this).data("form-url"),
+            });
           });
-        });
+        {% endif %}
+        {% if perms.risk.delete_project %}
+          $(".delete-project").each(function () {
+            $(this).modalForm({
+              formURL: $(this).data("form-url"),
+            });
+          });
+        {% endif %}
 
         $(".table td.clickable-row").each(function() {
             $(this).css("cursor","pointer").click(function() {
