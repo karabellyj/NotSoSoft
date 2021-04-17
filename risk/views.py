@@ -25,6 +25,10 @@ class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
     permission_required = ('risk.add_project',)
     success_url = reverse_lazy('project-list')
 
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
