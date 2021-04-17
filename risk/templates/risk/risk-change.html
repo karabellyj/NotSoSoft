@@ -2,7 +2,7 @@
     {% csrf_token %}
 
    <div class="modal-header">
-      <h5 class="modal-title">Create new Phase</h5>
+      <h5 class="modal-title">Edit Risk</h5>
 
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
@@ -22,7 +22,7 @@
             <div class="fieldWrapper col-6 ">
                 {{ form.name.errors }}
                 <label for="{{ form.name.id_for_label }}">Risk name:</label>
-                <input class="ml-2 form-control" type="text" name="name" id="{{form.name.id_for_label}}" required>
+                <input class="ml-2 form-control" type="text" name="name" id="{{form.name.id_for_label}}" value="{{object.name}}" required>
             </div>
             <div class="fieldWrapper col-6 ">
                 {{ form.risk_type.errors }}
@@ -30,7 +30,7 @@
                 <select class="ml-2  custom-select mr-sm-2" name="risk_type" id="{{form.risk_type.id_for_label}}">
 
                     {% for value,t in form.risk_type.field.choices %}
-                    <option value="{{ value }}" >{{ t }}</option>
+                    <option value="{{ value }}"{% if value == object.risk_type.pk %} selected{% endif %} >{{ t }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -40,14 +40,14 @@
             <div class="fieldWrapper col-6 ">
                 {{ form.threat.errors }}
                 <label for="{{ form.threat.id_for_label }}">Threat:</label>
-                <textarea class="ml-2 form-control"  name="threat" id=" {{form.threat.id_for_label}}" rows="3"></textarea>
+                <textarea class="ml-2 form-control"  name="threat" id=" {{form.threat.id_for_label}}" rows="3">{{object.threat}}</textarea>
 
             </div>
 
             <div class="fieldWrapper col-6 ">
                 {{ form.starter.errors }}
                 <label for="{{ form.starter.id_for_label }}">Starter:</label>
-                <textarea class="ml-2 form-control" name="starter" id=" {{form.starter.id_for_label}}" rows="3"></textarea>
+                <textarea class="ml-2 form-control" name="starter" id=" {{form.starter.id_for_label}}" rows="3">{{object.starter}}</textarea>
 
             </div>
 
@@ -59,7 +59,7 @@
             <label for="{{ form.risk_assignee.id_for_label }}">{{form.risk_assignee.label}}</label>
             <select class="custom-select mr-sm-2" name="risk_assignee" id="{{form.risk_assignee.id_for_label}}">
                 {% for value,t in form.risk_assignee.field.choices %}
-                    <option value="{{value }}" >{{ t }}</option>
+                    <option value="{{value }}" {% if value == object.risk_assignee.pk %} selected{% endif %}>{{ t }}</option>
                 {% endfor %}
               </select>
         </div>
@@ -68,7 +68,7 @@
         <div class="fieldWrapper">
             {{ form.description.errors }}
             <label for="{{ form.description.id_for_label }}">Description:</label>
-            <textarea class="form-control" name="description"  id="{{ form.description.id_for_label}}" rows="3"></textarea>
+            <textarea class="form-control" name="description"  id="{{ form.description.id_for_label}}" rows="3">{{object.description}}</textarea>
 
         </div>
         <div  class="form-group mt-3 row">
@@ -78,7 +78,7 @@
                 <select class="custom-select mr-sm-2"  name="impact" id="{{form.impact.id_for_label}}">
 
                     {% for value,t in form.impact.field.choices %}
-                    <option value="{{ value }}" >{{ t}}</option>
+                    <option value="{{ value }}" {% if value == object.impact.pk %} selected{% endif %} >{{ t}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -89,7 +89,7 @@
                 <select class="custom-select mr-sm-2" name="probability" id="{{form.probability.id_for_label}}">
 
                     {% for  value,t in form.probability.field.choices %}
-                    <option value="{{ value }}" >{{ t }}</option>
+                    <option value="{{ value }}" {% if value == object.probability.pk %} selected{% endif %}>{{ t }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -99,7 +99,7 @@
     <div class="fieldWrapper">
         {{ form.comment.errors }}
         <label for="{{ form.comment.id_for_label }}">Comment:</label>
-        <textarea class="form-control"  name="comment" id="{{form.comment.id_for_label}}" rows="3"></textarea>
+        <textarea class="form-control"  name="comment" id="{{form.comment.id_for_label}}" rows="3">{{object.comment}}</textarea>
 
     </div>
 
@@ -107,7 +107,7 @@
         <div class="fieldWrapper">
             {{ form.reactions.errors }}
             <label for="{{ form.reactions.id_for_label }}">Reactions:</label>
-            <textarea class="form-control"  name="reactions" id="{{form.reactions.id_for_label}}" rows="3"></textarea>
+            <textarea class="form-control"  name="reactions" id="{{form.reactions.id_for_label}}" rows="3">{{object.reactions}}</textarea>
 
         </div>
 
@@ -117,7 +117,7 @@
         <select class="custom-select mr-sm-2" name="state" id="{{form.state.id_for_label}}">
 
             {% for  value,t in form.state.field.choices %}
-            <option value="{{ value }}" >{{ t }}</option>
+            <option value="{{ value }}" {% if value == object.state.pk %} selected{% endif %}>{{ t }}</option>
             {% endfor %}
         </select>
     </div>
@@ -126,26 +126,25 @@
         <div class="fieldWrapper col-4">
             {{ form.start_date.errors }}
             <label for="{{ form.start_date.id_for_label }}">{{form.start_date.label}}</label>
-            <input class="form-control" type="date" name="start_date" id="{{form.start_date.id_for_label}}" required>
+            <input class="form-control" type="date" name="start_date" id="{{form.start_date.id_for_label}}" value="{{object.start_date|date:'Y-m-d'}}" required>
         </div>
 
         <div class="fieldWrapper col-4">
             {{ form.state_change_date.errors }}
             <label for="{{ form.state_change_date.id_for_label }}">{{form.state_change_date.label}}</label>
-            <input class="form-control" type="date" name="state_change_date" id="{{form.state_change_date.id_for_label}}" >
+            <input class="form-control" type="date" name="state_change_date" id="{{form.state_change_date.id_for_label}}" value="{{object.state_change_date|date:'Y-m-d'}}" >
 
         </div>
         <div class="fieldWrapper col-4">
             {{ form.reaction_date.errors }}
             <label for="{{ form.reaction_date.id_for_label }}">{{form.reaction_date.label}}</label>
-            <input class="form-control" type="date" name="reaction_date" id="{{form.reaction_date.id_for_label}}" >
+            <input class="form-control" type="date" name="reaction_date" id="{{form.reaction_date.id_for_label}}" value="{{object.reaction_date|date:'Y-m-d'}}" >
         </div>
 
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-success">Create</button>
+        <button type="submit" class="btn btn-success">Update</button>
     </div>
 
   </form>

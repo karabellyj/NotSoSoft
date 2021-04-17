@@ -130,4 +130,4 @@ class ProjectPhase(ActiveModel):
         ]
 
     def get_absolute_url(self):
-        return reverse('project-detail', kwargs={'pk': self.project.pk})
+        return reverse('project-phase-detail', kwargs={'project_id': self.project.pk, 'pk': self.pk})

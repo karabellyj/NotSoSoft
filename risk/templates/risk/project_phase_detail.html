@@ -12,24 +12,29 @@
                         <dt class="col-sm-4">Phase name</dt>
                         <dd class="col-sm-8"> {{ object.name }}</dd>
                         <dt class="col-sm-4">State</dt>
-                        <dd class="col-sm-8"> {{object.is_active}}</dd>
+                        <dd class="col-sm-8"> {{object.is_active|yesno:"active,inactive" }}</dd>
                         <dt class="col-sm-4">Start date</dt>
-                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+                        <dd class="col-sm-8"> {{object.start_date}} </dd>
                         <dt class="col-sm-4">Description</dt>
-                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+                        <dd class="col-sm-8"> {{object.description}}</dd>
                     </dl>
                     <dl class="col-sm-6 row">
                         <dt class="col-sm-4">Phase manager</dt>
-                        <dd class="col-sm-8"> book.name }}</dd>
+                        <dd class="col-sm-8"> {{object.phase_manager}}</dd>
                         <dt class="col-sm-4">End date</dt>
-                        <dd class="col-sm-8"> book.isbn_number }}</dd>
+                        <dd class="col-sm-8"> {{object.estimated_end_date|default_if_none:"-" }}</dd>
 
                     </dl>
 
                 </div>
                 <div class="float-right d-inline">
-                    <button type="button" class="btn btn-danger">Deactivate</button>
-                    <button type="button" class="btn btn-primary">Edit</button>
+                    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                        <div class="modal-dialog modal-xl" role="document">
+                          <div class="modal-content"></div>
+                        </div>
+                    </div>
+                    <button type="button" id="delete-phase" class=" btn btn-danger">Deactivate</button>
+                    <button type="button"  id="update-phase" class=" btn btn-primary">Edit</button>
                 </div>
             </div>
         </div>
@@ -38,29 +43,24 @@
                 <div class="row">
                     <h5 class="card-title col-3">Risks</h5>
                     <div class="col-9 ">
-                        <div class="modal fade" tabindex="-1" role="dialog" id="modal">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content"></div>
-                            </div>
-                        </div>
-                        <button id="create-risk" class="btn btn-success" type="button" name="button">Create Project</button>
-
 
                         <div class="form-inline float-right">
                             <div class="dropdown mr-2">
                                 <div class="form-inline">
-                                <label class="mr-2">Stav</label>
-                                <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-                                    All
-                                </button>
 
-                                <div class="dropdown-menu" aria-labelledby="dropdownPhases">
-                                    <button class="dropdown-item" type="button">Action</button>
-                                </div>
-                                </div>
+                                    <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                                      State
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                                        {% for state,text in states %}
+                                             <a class="dropdown-item" type="button" href="?state={{state}}">{{text}}</a>
+                                        {% endfor %}
+                                    </div>
+                                  </div>
+                            </div>
+                            <button id="create-risk" class="btn btn-success" type="button" name="button">Create Risk</button>
+                        </div>
 
-                            </div>
-                            </div>
 
                     </div>
                 </div>
@@ -73,29 +73,35 @@
                                 <th scope="col">Risk name</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">Threat</th>
-                                <th scope="col">Spúšťač</th>
+                                <th scope="col">Starter</th>
                                 <th scope="col">Owner</th>
                                 <th scope="col">Risk</th>
-                                <th scope="col">Opatrenie</th>
                                 <th scope="col">State</th>
                                 <th scope="col">Change date</th>
                                 <th scope="col"> </th>
                             </tr>
                         </thead>
                         <tbody>
-                        <!-- {% for book in books %} -->
-                            <tr>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
-                                <td><!----></td>
+                        {% for risk in risks %}
+                            <tr data-href="{% url 'risk-detail' project_id object.pk risk.pk %}">
+                                <td class="clickable-row">{{risk.name}}</td>
+                                <td class="clickable-row">{{risk.risk_type}}</td>
+                                <td class="clickable-row">{{risk.threat}}</td>
+                                <td class="clickable-row">{{risk.starter}}</td>
+                                <td class="clickable-row">{{risk.risk_assignee}}</td>
+                                <td class="clickable-row"><!----></td>
+                                <td class="clickable-row">{{risk.state}}</td>
+                                <td class="clickable-row">{{risk.state_change_date|default_if_none:"-"}}</td>
+                                <td>
+                                    <button type="button" class="update-risk btn btn-sm btn-warning" data-form-url="{% url 'risk-update' project_id object.pk risk.pk %}">
+                                        <span class="fa fa-pencil">Edit</span>
+                                      </button>
+                                    <button type="button" class="delete-risk btn btn-sm btn-danger" data-form-url="{% url 'risk-delete' project_id object.pk risk.pk %}">
+                                    <span class="fa fa-pencil">Deactivate</span>
+                                    </button>
+                                </td>
                             </tr>
-                        <!-- {% endfor %} -->
+                       {% endfor %}
                         </tbody>
                 </table>
 
@@ -110,11 +116,38 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
+        $("#update-phase").modalForm({
+            formURL: "{% url 'project-phase-update' project_id object.pk %}"
+        });
+
+        $("#delete-phase").modalForm({
+            formURL: "{% url 'project-phase-delete' project_id object.pk  %}"
+        });
+
         $("#create-risk").modalForm({
             formURL: "{% url 'risk-create' project_id object.pk %}"
         });
+
+        $(".update-risk").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
+          });
+        });
+
+        $(".delete-risk").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
+          });
+        });
+
+        $(".table td.clickable-row").each(function() {
+            $(this).css("cursor","pointer").click(function() {
+              document.location = $(this).parent().data("href");
+            })
+        });
+
     });
 
-</script>
+    </script>
 
 {% endblock js %}
