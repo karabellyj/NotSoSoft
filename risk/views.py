@@ -20,7 +20,7 @@ class HomeView(TemplateView):
 
 class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateProjectForm
-    template_name = "risk/project_create.html"
+    template_name = "risk/project_form.html"
     success_message = 'Success: Project was created.'
     permission_required = ('risk.add_project',)
     success_url = reverse_lazy('project-list')

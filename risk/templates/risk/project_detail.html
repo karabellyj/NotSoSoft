@@ -64,10 +64,7 @@
                                       <div class="modal-content"></div>
                                     </div>
                                 </div>
-                                <button id="create-phase" class="btn btn-success" type="button" name="button">Create Project</button>
-
-
-
+                                <button id="create-phase" class="btn btn-success float-right" type="button" name="button">Create Phase</button>
                             </div>
                         </div>
                     </div>
@@ -88,11 +85,11 @@
                                     {% for phase in phases %}
                                     <tr>
                                         <td><a href="{% url 'project-phase-detail' object.pk phase.pk %}">{{ phase.name }}</a></td>
+                                        <td>{{phase.phase_manager.name}}</td>
+                                        <td>{{phase.start_date }}</td>
+                                        <td>{{ phase.estimated_end_date }}</td>
                                         <td><!----></td>
-                                        <td><!----></td>
-                                        <td><!----></td>
-                                        <td><!----></td>
-                                        <td><li> <a href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li></td>
+                                        <td><li> <a id="update-phase" href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li></td>
                                     </tr>
 
                                     {% endfor %}
@@ -148,6 +145,10 @@
 
     </div>
 </div>
+   <!--   $("#update-phase").modalForm({
+            formURL: "{% url 'project-phase-update' object.pk  %}"
+        });
+    });-->
 {% endblock content %}
 
 {% block js %}
@@ -156,9 +157,8 @@
     $(document).ready(function() {
 
         $("#create-phase").modalForm({
-            formURL: "{% url 'project-phase-create' %}"
+            formURL: "{% url 'project-phase-create' object.pk  %}"
         });
-    });
 
     </script>
 
