@@ -127,5 +127,10 @@ class ProjectPhase(ActiveModel):
     phase_manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     project = models.ForeignKey('Project', on_delete=models.CASCADE)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['project', 'name'], name='unique_projectphase')
+        ]
+
     def get_absolute_url(self):
         return reverse('project-detail', kwargs={'pk': self.project.pk})
