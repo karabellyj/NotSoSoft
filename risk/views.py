@@ -19,10 +19,14 @@ class HomeView(TemplateView):
 
 class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateProjectForm
-    template_name = "risk/project_create.html"
+    template_name = "risk/project_form.html"
     success_message = 'Success: Project was created.'
     permission_required = ('risk.add_project',)
     success_url = reverse_lazy('project-list')
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
