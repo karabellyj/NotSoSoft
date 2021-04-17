@@ -86,5 +86,5 @@ class UpdateRiskForm(BSModalModelForm):
         self.fields['risk_assignee'].queryset = get_project_managers_qs(company=user.company) | get_phase_manager_qs(company=user.company)
 
     class Meta:
-        model = ProjectPhase
+        model = Risk
         exclude = ('project_phase',)
