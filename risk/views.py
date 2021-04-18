@@ -3,6 +3,7 @@ import tempfile
 from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalDeleteView,
                                            BSModalUpdateView)
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import (LoginRequiredMixin,
@@ -14,7 +15,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
-from weasyprint import HTML
+from weasyprint import CSS, HTML
 
 from users.utils import is_company_manager, is_customer, is_project_manager
 
@@ -318,7 +319,7 @@ def generate_pdf(request, risk_id):
 
     html_string = render_to_string('risk/pdf_template.html', {'object': risk}, request).encode(encoding='utf-8')
     html = HTML(string=html_string)
-    result = html.write_pdf()
+    result = html.write_pdf(stylesheets=[CSS(settings.BASE_DIR / 'static/css/bootstrap.min.css')])
 
     # Creating http response
     response = HttpResponse(content_type='application/pdf;')
