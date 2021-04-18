@@ -101,7 +101,7 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
         context['users'] = context['object'].customers.all() | project_manager | phase_managers
         if q:
             context['users'] = context['users'].annotate(fullname=Concat(
-                'first_name', Value(' '), 'last_name')).filter(Q(fullname__istartswith=q) | Q(fullname__icontains=q))
+                'first_name', Value(' '), 'last_name')).filter(Q(fullname__istartswith=q) | Q(fullname__icontains=q) | Q(username__istartswith=q))
         if role:
             context['users'] = context['users'].filter(groups__name=role)
 
