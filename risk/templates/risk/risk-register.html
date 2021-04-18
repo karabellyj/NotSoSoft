@@ -65,27 +65,7 @@
             <input type="radio" name="options" id="stateF" autocomplete="off"> Stav
           </label>
 
-        <script type="text/javascript">
 
-            $("#propF").click(function(){
-              $("#dopFD").hide();
-              $("#stateFD").hide();
-              $("#propFD").toggle();
-
-                  });
-            $("#dopF").click(function(){
-              $("#stateFD").hide();
-              $("#propFD").hide();
-              $("#dopFD").toggle();
-                  });
-            $("#stateF").click(function(){
-              $("#propFD").hide();
-              $("#dopFD").hide();
-              $("#stateFD").toggle();
-                  });
-
-
-        </script>
 
       </div>
     </div>
@@ -171,3 +151,30 @@
   </div>
   </div>
 {% endblock projekt-div %}
+
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#propF").click(function(){
+          $("#dopFD").hide();
+          $("#stateFD").hide();
+          $("#propFD").toggle();
+
+              });
+        $("#dopF").click(function(){
+          $("#stateFD").hide();
+          $("#propFD").hide();
+          $("#dopFD").toggle();
+              });
+        $("#stateF").click(function(){
+          $("#propFD").hide();
+          $("#dopFD").hide();
+          $("#stateFD").toggle();
+              });
+      });
+
+</script>
+{% endblock js %}
