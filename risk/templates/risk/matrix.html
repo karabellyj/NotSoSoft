@@ -1,30 +1,32 @@
 {% extends 'risk/project_detail.html' %}
 {% block title %}Matrix{% endblock title %}
 {% block projekt-div %}
-    <div class="bg-light col-10">
-    <table class="table table-bordered" id="matrix">
-        <thead class="thead-light">
-            <th></th>
-            {% for impact in impacts %}
-                <th>{{ impact }}</th>
+<div class="bg-light col-10 d-flex justify-content-center">
+
+    <table class="table border border-secondary mt-3" id="matrix">
+    <thead>
+    <th></th>
+    {% for impact in impacts %}
+        <th>{{ impact }}</th>
+    {% endfor %}
+    </thead>
+    <tbody>
+    {% for label, cols in matrix.items %}
+        <tr>
+            <th>{{ label }}</th>
+            {% for col in cols %}
+                <td>
+                    {% for risk in col %}
+                        <a href="{% url 'risk-detail' project_id risk.project_phase.pk risk.pk %}" class="text-dark"> {{ risk.name }} </a>
+                    {% endfor %}
+                </td>
             {% endfor %}
-        </thead>
-        <tbody>
-        {% for label, cols in matrix.items %}
-            <tr>
-                <th>{{ label }}</th>
-                {% for col in cols %}
-                    <td>
-                        {% for risk in col %}
-                            <a href="{% url 'risk-detail' project_id risk.project_phase.pk risk.pk %}" class="text-dark"> {{ risk.name }} </a>
-                        {% endfor %}
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
+        </tr>
+    {% endfor %}
+    </tbody>
     </table>
-    </div>
+
+</div>
 {% endblock projekt-div %}
 {% block js %}
 <script>
