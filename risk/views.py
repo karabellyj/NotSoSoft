@@ -1,4 +1,5 @@
 import tempfile
+from collections import Counter
 
 from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalDeleteView,
@@ -9,7 +10,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import Group
-from django.db.models import Q, Value
+from django.db.models import Count, Q, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -311,6 +312,23 @@ class MatrixView(TemplateView):
 
         context['matrix'] = matrix
         context['impacts'] = impacts_to_id.keys()
+        return context
+
+
+class StatsView(TemplateView):
+    template_name = 'risk/statistics.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        risks = Risk.objects.filter(project_phase__project__company=self.request.user.company)
+
+        context['num_happened_risks'] = risks.filter(state='Happened').count()
+        context['num_active_projects'] = Project.objects.filter(company=self.request.user.company).active().count()
+        context['num_vvhr_risks'] = len([risk for risk in risks.all() if risk.risk == 'VVHR'])
+
+        context['risk_states'] = risks.values('state').order_by('state').annotate(count=Count('state'))
+        context['risk_values'] = Counter([risk.risk for risk in risks])
+        print([risk.risk for risk in risks])
         return context
 
 
