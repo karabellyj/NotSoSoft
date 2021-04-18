@@ -33,8 +33,12 @@
                           <div class="modal-content"></div>
                         </div>
                     </div>
-                    <button type="button" id="delete-phase" class=" btn btn-danger">Deactivate</button>
-                    <button type="button"  id="update-phase" class=" btn btn-primary">Edit</button>
+                    {% if perms.risk.change_projectphase %}
+                        <button type="button"  id="update-phase" class=" btn btn-warning">Edit</button>
+                    {% endif %}
+                    {% if perms.risk.delete_projectphase %}
+                        <button type="button" id="delete-phase" class=" btn btn-danger">Deactivate</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -58,7 +62,9 @@
                                     </div>
                                   </div>
                             </div>
-                            <button id="create-risk" class="btn btn-success" type="button" name="button">Create Risk</button>
+                            {% if perms.risk.add_risk %}
+                                <button id="create-risk" class="btn btn-success" type="button" name="button">Create Risk</button>
+                            {% endif %}
                         </div>
 
 
@@ -89,16 +95,20 @@
                                 <td class="clickable-row">{{risk.threat}}</td>
                                 <td class="clickable-row">{{risk.starter}}</td>
                                 <td class="clickable-row">{{risk.risk_assignee}}</td>
-                                <td class="clickable-row"><!----></td>
+                                <td class="clickable-row">{{risk.risk}}</td>
                                 <td class="clickable-row">{{risk.state}}</td>
                                 <td class="clickable-row">{{risk.state_change_date|default_if_none:"-"}}</td>
                                 <td>
-                                    <button type="button" class="update-risk btn btn-sm btn-warning" data-form-url="{% url 'risk-update' project_id object.pk risk.pk %}">
-                                        <span class="fa fa-pencil">Edit</span>
-                                      </button>
-                                    <button type="button" class="delete-risk btn btn-sm btn-danger" data-form-url="{% url 'risk-delete' project_id object.pk risk.pk %}">
-                                    <span class="fa fa-pencil">Deactivate</span>
-                                    </button>
+                                    {% if perms.risk.change_risk %}
+                                        <button type="button" class="update-risk btn btn-sm btn-warning" data-form-url="{% url 'risk-update' project_id object.pk risk.pk %}">
+                                            <span class="fa fa-pencil">Edit</span>
+                                        </button>
+                                    {% endif %}
+                                    {% if perms.risk.delete_risk %}
+                                        <button type="button" class="delete-risk btn btn-sm btn-danger" data-form-url="{% url 'risk-delete' project_id object.pk risk.pk %}">
+                                            <span class="fa fa-pencil">Deactivate</span>
+                                        </button>
+                                    {% endif %}
                                 </td>
                             </tr>
                        {% endfor %}

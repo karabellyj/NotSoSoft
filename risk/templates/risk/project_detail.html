@@ -54,8 +54,12 @@
                                   <div class="modal-content"></div>
                                 </div>
                             </div>
-                            <button type="button" class="delete-project btn btn-danger">Deactivate</button>
-                            <button type="button" class="update-project btn btn-warning">Edit</button>
+                            {% if perms.risk.change_project %}
+                                <button type="button" class="update-project btn btn-warning">Edit</button>
+                            {% endif %}
+                            {% if perms.risk.delete_project %}
+                                <button type="button" class="delete-project btn btn-danger">Deactivate</button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -73,8 +77,9 @@
                                         <a class="dropdown-item" type="button" href="?active=true">Active</a>
                                         <a class="dropdown-item" type="button" href="?active=false">Inactive</a>
                                     </div>
-
-                                    <button class="create-phase btn btn-success float-right" type="button" name="button">Create Phase</button>
+                                    {% if perms.risk.add_projectphase %}
+                                        <button class="create-phase btn btn-success float-right" type="button" name="button">Create Phase</button>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -101,12 +106,16 @@
                                         <td class="clickable-row">{{ phase.estimated_end_date|default_if_none:"-" }}</td>
                                         <td class="clickable-row">{{ phase.is_active|yesno:"active,inactive" }}</td>
                                         <td>
-                                            <button type="button" class="update-phase btn btn-sm btn-warning" data-form-url="{% url 'project-phase-update' project_id phase.pk %}">
-                                                <span class="fa fa-pencil">Edit</span>
-                                              </button>
-                                            <button type="button" class="delete-phase btn btn-sm btn-danger" data-form-url="{% url 'project-phase-delete' project_id phase.pk  %}">
-                                            <span class="fa fa-pencil">Deactivate</span>
-                                            </button>
+                                            {% if perms.risk.change_projectphase %}
+                                                <button type="button" class="update-phase btn btn-sm btn-warning" data-form-url="{% url 'project-phase-update' project_id phase.pk %}">
+                                                    <span class="fa fa-pencil">Edit</span>
+                                                </button>
+                                            {% endif %}
+                                            {% if perms.risk.delete_projectphase %}
+                                                <button type="button" class="delete-phase btn btn-sm btn-danger" data-form-url="{% url 'project-phase-delete' project_id phase.pk  %}">
+                                                    <span class="fa fa-pencil">Deactivate</span>
+                                                </button>
+                                            {% endif %}
                                         </td>
                                     </tr>
 

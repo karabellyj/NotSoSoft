@@ -42,7 +42,7 @@
                     <dt class="col-sm-4">Probability</dt>
                     <dd class="col-sm-8">{{object.probability}}</dd>
                     <dt class="col-sm-4">Risk</dt>
-                    <dd class="col-sm-8">{{object.state}</dd>
+                    <dd class="col-sm-8">{{object.risk}}</dd>
                 </dl>
                 <dl class="col-sm-6 row">
                     <dt class="col-sm-4">Impact</dt>
@@ -85,8 +85,12 @@
                       <div class="modal-content"></div>
                     </div>
                 </div>
-                <button type="button" class="delete-risk btn btn-danger">Delete</button>
-                <button type="button" class="update-risk  btn btn-primary">Edit</button>
+                {% if perms.risk.delete_risk %}
+                    <button type="button" class="delete-risk btn btn-danger">Delete</button>
+                {% endif %}
+                {% if perms.risk.change_risk %}
+                    <button type="button" class="update-risk  btn btn-primary">Edit</button>
+                {% endif %}
                 <button type="button" class="btn btn-warning">Print</button>
             </div>
         </div>
