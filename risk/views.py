@@ -1,8 +1,11 @@
+import tempfile
+
 from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalDeleteView,
                                            BSModalUpdateView)
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponse
@@ -54,7 +57,7 @@ class ProjectUpdateView(PermissionRequiredMixin, BSModalUpdateView):
         return kwargs
 
 
-class ProjectListView(ListView):
+class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     template_name = "risk/project_list.html"
 
@@ -292,12 +295,17 @@ def generate_pdf(request, risk_id):
     risk = Risk.objects.get(pk=risk_id)
 
     html_string = render_to_string('risk/pdf_template.html', {'object': risk}, request).encode(encoding='utf-8')
-    html = HTML(string=html_string, base_url=request.build_absolute_uri())
-    html.render()
-    pdf = html.write_pdf()
+    html = HTML(string=html_string)
+    result = html.write_pdf()
 
     # Creating http response
-    response = HttpResponse(pdf, content_type='application/pdf;')
-    response['Content-Disposition'] = f'inline; filename=risk-{risk.name}.pdf'
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = f'inline; filename={risk.name}.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
 
     return response
