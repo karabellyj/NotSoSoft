@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView, DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from users.utils import is_company_manager, is_customer, is_project_manager
 
@@ -256,9 +256,10 @@ class RiskListView(PermissionRequiredMixin, ListView):
         return qs
 
 
-class RiskDeleteView(DeleteView):
+class RiskDeleteView(BSModalDeleteView):
     model = Risk
     template_name = "risk/risk_confirm_delete.html"
+    success_message = "OK"
 
     def get_success_url(self):
         return reverse_lazy('project-phase-detail', kwargs={'project_id': self.kwargs['project_id'], 'pk': self.kwargs['phase_id']})
