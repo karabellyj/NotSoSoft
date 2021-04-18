@@ -103,7 +103,7 @@
 {{block.super}}
 <script type="text/javascript">
     $(document).ready(function() {
-        {% if perms.risk.create_project %}
+        {% if perms.risk.add_project %}
           $("#create-project").modalForm({
             formURL: "{% url 'project-create' %}"
           });
