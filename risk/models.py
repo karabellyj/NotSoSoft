@@ -83,6 +83,21 @@ class Risk(models.Model):
     state_change_date = models.DateField(null=True, blank=True)
     reaction_date = models.DateField(null=True, blank=True)
 
+    @property
+    def risk(self):
+        matrix = [
+            ['VVHR', 'VVHR', 'VHR', 'VHR', 'SHR'],
+            ['VVHR', 'VVHR', 'VHR', 'SHR', 'NHR'],
+            ['VHR', 'VHR', 'SHR', 'NHR', 'NHR'],
+            ['VHR', 'SHR', 'NHR', 'VNHR', 'VNHR'],
+            ['SHR', 'NHR', 'NHR', 'VNHR', 'VNHR']
+        ]
+
+        proba_to_id = dict(zip(map(lambda x: x[0], self.Probability.choices), range(0, len(self.Probability))))
+        impacts_to_id = dict(zip(map(lambda x: x[0], self.Impact.choices), range(0, len(self.Impact))))
+
+        return matrix[proba_to_id[self.probability]][impacts_to_id[self.impact]]
+
     def get_absolute_url(self):
         return reverse('risk-detail', kwargs={'project_id': self.project_phase.project.pk, 'phase_id': self.project_phase.pk, 'pk': self.pk})
 
