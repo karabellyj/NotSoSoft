@@ -129,15 +129,29 @@
                 <div class="card mt-3">
                     <div class="card-header">
                         <div class="row justify-content-between">
-                            <h5 class="card-title col-3">Customers </h5>
+                            <h5 class="card-title col-3">Users </h5>
                             <div class=" col-5">
-                                <div class="float-right">
-                                <form class="form-inline" action="" method="GET">
-                                    <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
-                                    <button type="submit" class="btn btn-primary ml-2">
-                                      Vyhľadať
-                                    </button>
-                                </form>
+                                <div class="float-right form-inline row">
+                                    <div class="dropdown mr-2">
+                                        <div class="form-inline">
+
+                                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                                              Role
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                                                {% for role in roles %}
+                                                     <a class="dropdown-item" type="button" href="?role={{role.name}}">{{role.name}}</a>
+                                                {% endfor %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <form class="form-inline" action="" method="GET">
+                                        <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
+                                        <button type="submit" class="btn btn-primary ml-2">
+                                        Vyhľadať
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

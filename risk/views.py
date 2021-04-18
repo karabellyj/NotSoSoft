@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
+from django.contrib.auth.models import Group
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponse
@@ -92,6 +93,7 @@ class ProjectDetailView(PermissionRequiredMixin, DetailView):
         active = self.request.GET.get('active', 'true')
         q = self.request.GET.get('q')
         role = self.request.GET.get('role')
+        context['roles'] = Group.objects.all()
 
         context['phases'] = ProjectPhase.objects.filter(project=context['object'])
         if active == 'true':
@@ -329,3 +331,8 @@ def generate_pdf(request, risk_id):
         response.write(output.read())
 
     return response
+
+
+class StatisticsView(TemplateView):
+    model = Project
+    template_name = "risk/statistics.html"

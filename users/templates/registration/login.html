@@ -2,31 +2,34 @@
 
 {% block content %}
 
-  {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
-  {% endif %}
 
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
-    {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
+
+
 
 
 <div class="container-fluid d-flex  row" style="min-height: 100%; height: 100%;">
 <div class=" bg-dark d-flex justify-content-center col-6">
   <div style="margin-top: 50%">
-    <h1 class="text-light">Risk Register application <br>by NotSoSoft team.</h1>
+    <h1 class="text-light">Project risk managment <br>by NotSoSoft team.</h1>
   </div>
 
 </div>
 <div class=" bg-light d-flex col-6 justify-content-center ">
   <div style="margin-top: 50%">
+    {% if form.errors %}
+    <h4 class="text-danger">Your username and password didn't match. Please try again.</h4>
+  {% endif %}
+    {% if next %}
+    {% if user.is_authenticated %}
+    <h4 class="text-danger">Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</h4>
+    {% else %}
+      <h4 class="text-danger">Please login to see this page.</h4>
+    {% endif %}
+  {% endif %}
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
+
     <div class="form-group">
       <label for="{{form.username.id_for_label}}">{{ form.username.label_tag }}</label>
       <input type="text" class="form-control" name="username" id="{{form.username.id_for_label}}" required placeholder="User Name">

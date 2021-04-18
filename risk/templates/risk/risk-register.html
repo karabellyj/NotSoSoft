@@ -4,65 +4,58 @@
   <div class="bg-light col-10">
     <div class="row mt-3">
 
-      <div class="col-md-3 dropdown">
+      <div class="col-md-4 dropdown">
         <div class="form-inline">
-          <label class="mr-2">Etapy</label>
+
           <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-            Všetky
+            Phase
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownPhases">
-            <button class="dropdown-item" type="button">Action</button>
-
+              {% for phase in phases %}
+                   <a class="dropdown-item" type="button" href="?phase={{phase.pk}}">{{phase.name}}</a>
+              {% endfor %}
           </div>
         </div>
-
       </div>
-      <div class="col-md-3 dropdown">
+      <div class="col-md-4 dropdown">
         <div class="form-inline">
-          <label class="mr-2">Kategória</label>
-          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownCategory" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           Všetky
+
+          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+            Category
           </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownCategory">
-            <button class="dropdown-item" type="button">Action</button>
+          <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+              {% for risk_type in risk_types %}
+                   <a class="dropdown-item" type="button" href="?risk_type={{risk_type.pk}}">{{risk_type.name}}</a>
+              {% endfor %}
           </div>
-        </div>
+      </div>
 
       </div>
-      <div class="col-md-3 dropdown">
-        <div class="form-inline">
-          <label class="mr-2">Podkategória</label>
-          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownSubCat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Všetky
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownSubCat">
-            <button class="dropdown-item" type="button">Action</button>
-            <button class="dropdown-item" type="button">Another action</button>
-            <button class="dropdown-item" type="button">Something else here</button>
-          </div>
-        </div>
+      <div class="col-md-4 input-group float-right row">
+          <form action="" method="GET">
+            <div class="form-inline row">
+              <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
+              <button type="submit" class="btn btn-primary ml-2">
+                Vyhľadať
+              </button>
+            </div>
+        </form>
 
-      </div>
-      <div class="col-md-3 input-group float-right">
-        <div class="form-inline">
-          <input class="form-control" type="search"  placeholder="Search" aria-label="Search" />
-          <button type="button" class="btn btn-primary ">
-            Vyhľadať
-          </button>
-        </div>
     </div>
 
     </div>
+
+
     <div class="row mt-4">
         <div class="col-md-10 offset-md-1 row btn-group btn-group-toggle" data-toggle="buttons">
           <label class="col-md-4 btn btn-secondary active">
-            <input type="radio" name="options" id="propF" autocomplete="off"> Pravdepodobnosť
+            <input type="radio" name="options" id="propF" autocomplete="off"> Probability
           </label>
           <label class="col-md-4 btn btn-secondary">
-            <input type="radio" name="options" id="dopF" autocomplete="off"> Dopad
+            <input type="radio" name="options" id="dopF" autocomplete="off"> Impact
           </label>
           <label class=" col-md-4 btn btn-secondary">
-            <input type="radio" name="options" id="stateF" autocomplete="off"> Stav
+            <input type="radio" name="options" id="stateF" autocomplete="off"> State
           </label>
 
 
@@ -71,31 +64,59 @@
     </div>
 
         <div class="m-3 p-3 card" id="propFD" style="display: none;">
-          <div class="form-check-inline ">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              Default checkbox
-            </label>
-          </div>
+          <form method='GET'  action='' >
+            {% for prob,text in probabilities %}
+            <div class="form-check-inline ">
+
+
+              <input class="form-check-input" name="probability" type="checkbox" value="{{prob}}" id="{{prob}}">
+              <label class="form-check-label" for="{{prob}}">
+                {{text}}
+              </label>
+
+
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </form>
         </div>
 
         <div class="m-3 p-3 card" id="dopFD" style="display: none;">
-          <div class="form-check-inline">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              Default checkbox
-            </label>
-          </div>
+          <form method='GET'  action='' >
+            {% for impact,text in impacts %}
+            <div class="form-check-inline ">
+
+
+              <input class="form-check-input" name="impact" type="checkbox" value="{{impact}}" id="{{impact}}">
+              <label class="form-check-label" for="{{impact}}">
+                {{text}}
+              </label>
+
+
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </form>
         </div>
 
         <div class="m-3 p-3 card" id="stateFD" style="display: none;">
-          <div class="form-check-inline">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-              Default checkbox
-            </label>
-          </div>
+          <form method='GET'  action='' >
+            {% for state,text in states %}
+            <div class="form-check-inline ">
+
+
+              <input class="form-check-input" name="state" type="checkbox" value="{{state}}" id="{{state}}">
+              <label class="form-check-label" for="{{state}}">
+                {{text}}
+              </label>
+
+
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </form>
         </div>
+
 
 
     <div class="row mt-3">
@@ -122,29 +143,29 @@
                           <th scope="col">Reaction</th>
                           <th scope="col">State</th>
                           <th scope="col">Create date</th>
-                          <th scope="col">Modifi</th>
+                          <th scope="col">Modif. date</th>
                           <th scope="col">Reaction date</th>
 
                       </tr>
                   </thead>
                   <tbody>
-                     <!-- {% for risk in risks %} -->
+                     {% for risk in object_list %}
                       <tr>
-                          <td><!--risk.name--></td>
-                          <td>risk.risk_type</td>
-                          <td>risk.threat</td>
-                          <td>risk.starter</td>
-                          <td>risk.risk_assignee</td>
-                          <td>risk.probability</td>
-                          <td>risk.impact</td>
-                          <td>risk.</td>
-                          <td>risk.reaction</td>
-                          <td>risk.state</td>
-                          <td>risk.start_date</td>
-                          <td>risk.state_change_date</td>
-                          <td>risk.reaction_date</td>
+                          <td>{{risk.name}}</td>
+                          <td>{{risk.risk_type}}</td>
+                          <td>{{risk.threat}}</td>
+                          <td>{{risk.starter}}</td>
+                          <td>{{risk.risk_assignee}}</td>
+                          <td>{{risk.probability}}</td>
+                          <td>{{risk.impact}}</td>
+                          <td>{{risk.risk}}</td>
+                          <td>{{risk.reaction}}</td>
+                          <td>{{risk.state}}</td>
+                          <td>{{risk.start_date}}</td>
+                          <td>{{risk.state_change_date|default_if_none:"-" }}</td>
+                          <td>{{risk.reaction_date|default_if_none:"-" }}</td>
                       </tr>
-                     <!-- {% endfor %} -->
+                    {% endfor %}
                   </tbody>
           </table>
 
