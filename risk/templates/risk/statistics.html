@@ -106,7 +106,7 @@ $(document).ready(function() {
         type: 'pie'
         },
         title: {
-        text: 'Stavy rizík'
+        text: 'Risk values'
         },
         tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -127,7 +127,7 @@ $(document).ready(function() {
         }
         },
         series: [{
-        name: 'Brands',
+        name: 'Value',
         colorByPoint: true,
         data: [
         {% for risk, count in risk_values %}
