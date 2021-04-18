@@ -326,8 +326,7 @@ class StatsView(TemplateView):
         context['num_vvhr_risks'] = len([risk for risk in risks.all() if risk.risk == 'VVHR'])
 
         context['risk_states'] = risks.values('state').order_by('state').annotate(count=Count('state'))
-        context['risk_values'] = Counter([risk.risk for risk in risks])
-        print([risk.risk for risk in risks])
+        context['risk_values'] = Counter([risk.risk for risk in risks]).items()
         return context
 
 
