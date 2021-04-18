@@ -19,7 +19,7 @@ from users.utils import is_company_manager, is_customer, is_project_manager
 
 from .forms import (CreateProjectForm, CreateProjectPhaseForm, CreateRiskForm,
                     UpdateProjectForm, UpdateProjectPhaseForm, UpdateRiskForm)
-from .models import Project, ProjectPhase, Risk
+from .models import Project, ProjectPhase, Risk, RiskType
 
 
 class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
@@ -248,6 +248,8 @@ class RiskListView(PermissionRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['project_id'] = self.kwargs['project_id']
+        context['phases'] = ProjectPhase.objects.filter(project__pk=self.kwargs['project_id'])
+        context['risk_types'] = RiskType.objects.all()
         return context
 
     def get_queryset(self):
