@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"></head>
-</head>
-<body>
-    LOL
-{% comment %} <div class="bg-light col-10">
+<html>
+ <head>
+   <title>{{object.name}}</title>
+ </head>
+ <body>
+   <div class="bg-light col-10">
     <div class="card mt-3">
         <div class="card-header">
             <h5 class="card-title">Basic info</h5>
@@ -20,7 +15,7 @@
                     <dd class="col-sm-8">{{object.name}}</dd>
                     <dt class="col-sm-4">Threat</dt>
                     <dd class="col-sm-8">{{object.threat}}</dd>
-                    <dt class="col-sm-4">Spúšťač</dt>
+                    <dt class="col-sm-4">starter</dt>
                     <dd class="col-sm-8">{{object.starter}}</dd>
                     <dt class="col-sm-4">Owner</dt>
                     <dd class="col-sm-8">{{object.risk_assignee}}</dd>
@@ -41,7 +36,7 @@
     </div>
     <div class="card mt-3">
         <div class="card-header">
-            <h5 class="card-title">Výpočet rizika</h5>
+            <h5 class="card-title">Risk</h5>
         </div>
         <div class="card-body">
             <div class="row">
@@ -61,7 +56,7 @@
     </div>
     <div class="card mt-3">
         <div class="card-header">
-            <h5 class="card-title">Reakcia na riziko</h5>
+            <h5 class="card-title">Risk reaction</h5>
         </div>
         <div class="card-body">
             <dl class="row">
@@ -86,8 +81,6 @@
             <dd >{{object.reaction_date}}</dd>
         </div>
     </div>
-</div> {% endcomment %}
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+</div>
 </body>
 </html>

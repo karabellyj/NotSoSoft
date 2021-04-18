@@ -1,19 +1,21 @@
 import tempfile
+from collections import Counter
 
 from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalDeleteView,
                                            BSModalUpdateView)
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import Group
-from django.db.models import Q, Value
+from django.db.models import Count, Q, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
-from weasyprint import HTML
+from weasyprint import CSS, HTML
 
 from users.utils import is_company_manager, is_customer, is_project_manager
 
@@ -312,12 +314,29 @@ class MatrixView(TemplateView):
         return context
 
 
+class StatsView(TemplateView):
+    template_name = 'risk/statistics.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        risks = Risk.objects.filter(project_phase__project__company=self.request.user.company)
+
+        context['num_happened_risks'] = risks.filter(state='Happened').count()
+        context['num_active_projects'] = Project.objects.filter(company=self.request.user.company).active().count()
+        context['num_vvhr_risks'] = len([risk for risk in risks.all() if risk.risk == 'VVHR'])
+
+        context['risk_states'] = risks.values('state').order_by('state').annotate(count=Count('state'))
+        context['risk_values'] = Counter([risk.risk for risk in risks])
+        print([risk.risk for risk in risks])
+        return context
+
+
 def generate_pdf(request, risk_id):
     risk = Risk.objects.get(pk=risk_id)
 
     html_string = render_to_string('risk/pdf_template.html', {'object': risk}, request).encode(encoding='utf-8')
     html = HTML(string=html_string)
-    result = html.write_pdf()
+    result = html.write_pdf(stylesheets=[CSS(settings.BASE_DIR / 'static/css/bootstrap.min.css')])
 
     # Creating http response
     response = HttpResponse(content_type='application/pdf;')
