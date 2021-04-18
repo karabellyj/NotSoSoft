@@ -134,8 +134,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/risk/projects'
 
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login'
 
 AUTH_USER_MODEL = 'users.CustomUser'

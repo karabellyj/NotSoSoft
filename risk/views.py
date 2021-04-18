@@ -18,10 +18,6 @@ from .forms import (CreateProjectForm, CreateProjectPhaseForm, CreateRiskForm,
 from .models import Project, ProjectPhase, Risk
 
 
-class HomeView(TemplateView):
-    template_name = 'home.html'
-
-
 class ProjectCreateView(PermissionRequiredMixin, BSModalCreateView):
     form_class = CreateProjectForm
     template_name = "risk/project_form.html"

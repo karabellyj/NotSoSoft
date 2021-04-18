@@ -111,37 +111,38 @@
               <tr>
                   <thead class="thead-light">
                       <tr>
-                          <th scope="col">Názov rizika</th>
-                          <th scope="col">Kategória</th>
-                          <th scope="col">Hrozba</th>
-                          <th scope="col">Spúšťač</th>
-                          <th scope="col">Vlastník</th>
-                          <th scope="col">Pravdepodobnosť</th>
-                          <th scope="col">Dopad</th>
-                          <th scope="col">Riziko</th>
-                          <th scope="col">Opatrenie</th>
-                          <th scope="col">Stav</th>
-                          <th scope="col">Dátum identifikácie</th>
-                          <th scope="col">Dátum zmeny</th>
-                          <th scope="col">Dátum ukončenia</th>
-                          <th scope="col"> </th>
+                          <th scope="col">Risk name</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Threat</th>
+                          <th scope="col">Starter</th>
+                          <th scope="col">Owner</th>
+                          <th scope="col">Probability</th>
+                          <th scope="col">Impact</th>
+                          <th scope="col">Risk</th>
+                          <th scope="col">Reaction</th>
+                          <th scope="col">State</th>
+                          <th scope="col">Create date</th>
+                          <th scope="col">Modifi</th>
+                          <th scope="col">Reaction date</th>
+
                       </tr>
                   </thead>
                   <tbody>
-                     <!-- {% for book in books %} -->
+                     <!-- {% for risk in risks %} -->
                       <tr>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
-                          <td><!----></td>
+                          <td><!--risk.name--></td>
+                          <td>risk.risk_type</td>
+                          <td>risk.threat</td>
+                          <td>risk.starter</td>
+                          <td>risk.risk_assignee</td>
+                          <td>risk.probability</td>
+                          <td>risk.impact</td>
+                          <td>risk.</td>
+                          <td>risk.reaction</td>
+                          <td>risk.state</td>
+                          <td>risk.start_date</td>
+                          <td>risk.state_change_date</td>
+                          <td>risk.reaction_date</td>
                       </tr>
                      <!-- {% endfor %} -->
                   </tbody>
