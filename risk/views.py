@@ -249,6 +249,10 @@ class RiskListView(PermissionRequiredMixin, ListView):
         context['project_id'] = self.kwargs['project_id']
         context['phases'] = ProjectPhase.objects.filter(project__pk=self.kwargs['project_id'])
         context['risk_types'] = RiskType.objects.all()
+
+        context['probabilities'] = Risk.Probability.choices
+        context['impacts'] = Risk.Impact.choices
+        context['states'] = Risk.State.choices
         return context
 
     def get_queryset(self):
