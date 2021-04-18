@@ -1,24 +1,32 @@
-<table>
-<thead>
-<th></th>
-{% for impact in impacts %}
-    <th>{{ impact }}</th>
-{% endfor %}
-</thead>
-<tbody>
-{% for label, cols in matrix.items %}
-    <tr>
-        <th>{{ label }}</th>
-        {% for col in cols %}
-            <td>
-                <ul>
-                    {% for risk in col %}
-                        <li> {{ risk.name }} </li>
-                    {% endfor %}
-                </ul>
-            </td>
-        {% endfor %}
-    </tr>
-{% endfor %}
-</tbody>
-</table>
+{% extends 'risk/project_detail.html' %}
+
+{% block projekt-div %}
+<div class="bg-light col-10 d-flex justify-content-center">
+
+    <table class="table border border-secondary mt-3">
+    <thead>
+    <th></th>
+    {% for impact in impacts %}
+        <th>{{ impact }}</th>
+    {% endfor %}
+    </thead>
+    <tbody>
+    {% for label, cols in matrix.items %}
+        <tr>
+            <th>{{ label }}</th>
+            {% for col in cols %}
+                <td>
+                    <ul>
+                        {% for risk in col %}
+                            <li> {{ risk.name }} </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+</div>
+{% endblock projekt-div %}
