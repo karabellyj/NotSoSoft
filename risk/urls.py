@@ -5,7 +5,7 @@ from .views import (MatrixView, ProjectCreateView, ProjectDeleteView,
                     ProjectPhaseDeleteView, ProjectPhaseDetailView,
                     ProjectPhaseUpdateView, ProjectUpdateView, RiskCreateView,
                     RiskDeleteView, RiskDetailView, RiskListView,
-                    RiskUpdateView)
+                    RiskUpdateView, generate_pdf)
 
 urlpatterns = [
     path('projects/', ProjectListView.as_view(), name='project-list'),
@@ -23,6 +23,7 @@ urlpatterns = [
     path('project/<int:project_id>/phase/<int:phase_id>/risk/<int:pk>/update/', RiskUpdateView.as_view(), name='risk-update'),
     path('project/<int:project_id>/phase/<int:phase_id>/risk/<int:pk>/', RiskDetailView.as_view(), name='risk-detail'),
     path('project/<int:project_id>/phase/<int:phase_id>/risk/<int:pk>/delete/', RiskDeleteView.as_view(), name='risk-delete'),
+    path('project/print/risk/<int:risk_id>/', generate_pdf, name='risk-print'),
 
     path('project/<int:project_id>/register/', RiskListView.as_view(), name='risk-register'),
 

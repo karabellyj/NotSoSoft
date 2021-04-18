@@ -6,8 +6,11 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import Q, Value
 from django.db.models.functions import Concat
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
+from weasyprint import HTML
 
 from users.utils import is_company_manager, is_customer, is_project_manager
 
@@ -274,7 +277,8 @@ class MatrixView(TemplateView):
         project_id = self.kwargs['project_id']
 
         risks = Risk.objects.filter(project_phase__project=project_id).all()
-        matrix = dict(zip(map(lambda x: x[0], Risk.Probability.choices), [[[]] * len(Risk.Impact)] * len(Risk.Probability)))
+
+        matrix = dict(zip(map(lambda x: x[0], Risk.Probability.choices), [[[] for _ in range(len(Risk.Impact))] for _ in range(len(Risk.Probability))]))
         impacts_to_id = dict(zip(map(lambda x: x[0], Risk.Impact.choices), range(0, len(Risk.Impact))))
 
         for risk in risks:
@@ -283,3 +287,18 @@ class MatrixView(TemplateView):
         context['matrix'] = matrix
         context['impacts'] = impacts_to_id.keys()
         return context
+
+
+def generate_pdf(request, risk_id):
+    risk = Risk.objects.get(pk=risk_id)
+
+    html_string = render_to_string('risk/pdf_template.html', {'object': risk}, request).encode(encoding='utf-8')
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
+    html.render()
+    pdf = html.write_pdf()
+
+    # Creating http response
+    response = HttpResponse(pdf, content_type='application/pdf;')
+    response['Content-Disposition'] = f'inline; filename=risk-{risk.name}.pdf'
+
+    return response
