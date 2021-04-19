@@ -9,7 +9,6 @@ from .views import (MatrixView, ProjectCreateView, ProjectDeleteView,
 
 urlpatterns = [
     path('projects/', ProjectListView.as_view(), name='project-list'),
-    path('statistics/', StatisticsView.as_view(), name='statistics'),
     path('project/create/', ProjectCreateView.as_view(), name='project-create'),
     path('project/<int:pk>/update/', ProjectUpdateView.as_view(), name='project-update'),
     path('project/<int:pk>/', ProjectDetailView.as_view(), name='project-detail'),

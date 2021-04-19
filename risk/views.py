@@ -6,7 +6,6 @@ from bootstrap_modal_forms.generic import (BSModalCreateView,
                                            BSModalUpdateView)
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
 from django.contrib.auth.models import Group
