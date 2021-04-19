@@ -130,13 +130,14 @@ $(document).ready(function() {
         name: 'Value',
         colorByPoint: true,
         data: [
-        {% for risk,count in risk_values.items %}
+        {% for risk,count in risk_values %}
             {
                 name: "{{risk}}",
                 y: parseInt("{{count}}", 10)
             },
         {% endfor %}
         ]
+        }]
     });
 
 });
