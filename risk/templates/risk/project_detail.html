@@ -1,20 +1,243 @@
 {% extends 'base.html' %}
 {% block title %}Project Detail{% endblock title %}
 {% block content %}
-    <p>{{ object.name }}</p>
-    <div>
-        <a href="{% url 'project-phase-create' object.pk %}">Create Phase</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10 offset-md-1  row">
+            <div class="col-2">
+                <nav class="navbar  bg-light ">
+                    <!-- Links -->
+                        <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'project-detail' project_id %}">Project details</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'risk-register' project_id %}">Risk register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'matrix' project_id %}">Matrix</a>
+                        </li>
+                        </ul>
+
+                </nav>
+            </div>
+        {% block projekt-div %}
+            <div class="bg-light col-10">
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title">Project details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <dl class="col-sm-6 row">
+                                <dt class="col-sm-4">Project name</dt>
+                                <dd class="col-sm-8">{{ object.name }}</dd>
+                                <dt class="col-sm-4">Stav</dt>
+                                <dd class="col-sm-8">{{object.is_active|yesno:"active,inactive"}}</dd>
+                                <dt class="col-sm-4">Start date</dt>
+                                <dd class="col-sm-8">{{ project.start_date }}</dd>
+                                <dt class="col-sm-4">Description</dt>
+                                <dd class="col-sm-8">{{ project.description }} </dd>
+                            </dl>
+                            <dl class="col-sm-6 row">
+                                <dt class="col-sm-4">Project manager</dt>
+                                <dd class="col-sm-8">{{ project.project_manager }}</dd>
+                                <dt class="col-sm-4">End date</dt>
+                                <dd class="col-sm-8">{{ project.estimated_end_date|default_if_none:"-" }}</dd>
+
+                            </dl>
+
+                        </div>
+                        <div class="float-right d-inline">
+                            <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content"></div>
+                                </div>
+                            </div>
+                            {% if perms.risk.change_project %}
+                                <button type="button" class="update-project btn btn-warning">Edit</button>
+                            {% endif %}
+                            {% if perms.risk.delete_project %}
+                                <button type="button" class="delete-project btn btn-danger">Deactivate</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="card-title col-3">Phases </h5>
+                            <div class="col-9  ">
+                                <div class="float-right">
+                                    <button class="btn btn-outline-info dropdown-toggle mr-2" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                                        State
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                                        <a class="dropdown-item" type="button" href="?active">All</a>
+                                        <a class="dropdown-item" type="button" href="?active=true">Active</a>
+                                        <a class="dropdown-item" type="button" href="?active=false">Inactive</a>
+                                    </div>
+                                    {% if perms.risk.add_projectphase %}
+                                        <button class="create-phase btn btn-success float-right" type="button" name="button">Create Phase</button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <tr>
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Phase name</th>
+                                        <th scope="col">Phase manager</th>
+                                        <th scope="col">Start date</th>
+                                        <th scope="col">End date</th>
+                                        <th scope="col">State</th>
+                                        <th scope="col"> </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for phase in phases %}
+                                    <tr  data-href="{% url 'project-phase-detail' project_id phase.pk %}">
+                                        <td class="clickable-row">{{ phase.name }}</td>
+                                        <td class="clickable-row">{{ phase.phase_manager }}</td>
+                                        <td class="clickable-row">{{ phase.start_date }}</td>
+                                        <td class="clickable-row">{{ phase.estimated_end_date|default_if_none:"-" }}</td>
+                                        <td class="clickable-row">{{ phase.is_active|yesno:"active,inactive" }}</td>
+                                        <td>
+                                            {% if perms.risk.change_projectphase %}
+                                                <button type="button" class="update-phase btn btn-sm btn-warning" data-form-url="{% url 'project-phase-update' project_id phase.pk %}">
+                                                    <span class="fa fa-pencil">Edit</span>
+                                                </button>
+                                            {% endif %}
+                                            {% if perms.risk.delete_projectphase %}
+                                                <button type="button" class="delete-phase btn btn-sm btn-danger" data-form-url="{% url 'project-phase-delete' project_id phase.pk  %}">
+                                                    <span class="fa fa-pencil">Deactivate</span>
+                                                </button>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <div class="row justify-content-between">
+                            <h5 class="card-title col-3">Users </h5>
+                            <div class=" col-5">
+                                <div class="float-right form-inline row">
+                                    <div class="dropdown mr-2">
+                                        <div class="form-inline">
+
+                                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                                              Role
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                                                {% for role in roles %}
+                                                     <a class="dropdown-item" type="button" href="?role={{role.name}}">{{role.name}}</a>
+                                                {% endfor %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <form class="form-inline" action="" method="GET">
+                                        <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
+                                        <button type="submit" class="btn btn-primary ml-2">
+                                        Vyhľadať
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">First name</th>
+                                        <th scope="col">Last name</th>
+                                        <th scope="col">Login</th>
+                                        <th scope="col">Role</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{ user.first_name }}</td>
+                                        <td>{{ user.last_name }}</td>
+                                        <td>{{ user.username }}</td>
+                                        <td>{{ user.groups.all.0.name }}</td>
+                                    </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        {% endblock projekt-div %}
+        </div>
+
     </div>
-    <h4>Phases</h4>
-    <ul>
-    {% for phase in phases %}
-        <li><a href="{% url 'project-phase-detail' object.pk phase.pk %}">{{ phase.name }}</a> - <a href="{% url 'project-phase-update' object.pk phase.pk %}">Edit</a></li>
-    {% endfor %}
-    </ul>
-    <h4>Customers</h4>
-    <ul>
-    {% for user in users %}
-        <li>{{ user.username }}</li>
-    {% endfor %}
-    </ul>
+</div>
+
 {% endblock content %}
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $(".update-project").modalForm({
+            formURL: "{% url 'project-update' project_id %}"
+        });
+
+        $(".delete-project").modalForm({
+            formURL: "{% url 'project-delete' project_id %}"
+        });
+
+        $(".create-phase").modalForm({
+            formURL: "{% url 'project-phase-create' project_id %}"
+        });
+
+        $(".update-phase").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
+          });
+        });
+
+        $(".delete-phase").each(function () {
+          $(this).modalForm({
+            formURL: $(this).data("form-url"),
+          });
+        });
+
+        $(".table td.clickable-row").each(function() {
+            $(this).css("cursor","pointer").click(function() {
+              document.location = $(this).parent().data("href");
+            })
+        });
+
+
+
+
+
+
+
+
+
+    });
+
+    </script>
+
+{% endblock js %}

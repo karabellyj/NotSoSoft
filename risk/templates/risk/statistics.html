@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects{% endblock title %}
+{% block content %}
+
+<div class="container-xl bg-light">
+
+    <div class="card-deck pt-3 mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Active projects</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{num_active_projects}}</h1>
+
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Happened risks</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{num_happened_risks}}</h1>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">VVHR risks</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">{{num_vvhr_risks}}</h1>
+
+          </div>
+        </div>
+      </div>
+
+    <figure >
+        <div id="container1"></div>
+
+    </figure>
+
+    <figure >
+        <div id="container2"></div>
+
+    </figure>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+{{block.super}}
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    Highcharts.chart('container1', {
+        chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+        },
+        title: {
+        text: 'Risk states'
+        },
+        tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+        point: {
+            valuePrefix: '#'
+        }
+        },
+        plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+        },
+        series: [{
+        name: 'States',
+        colorByPoint: true,
+        data: [
+        {% for item in risk_states %}
+            {
+                name: "{{item.state}}",
+                y: parseInt("{{item.count}}", 10)
+            },
+        {% endfor %}
+        ]
+        }]
+    });
+
+    Highcharts.chart('container2', {
+        chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+        },
+        title: {
+        text: 'Risk values'
+        },
+        tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+        point: {
+            valueSuffix: '%'
+        }
+        },
+        plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
+        }
+        },
+        series: [{
+        name: 'Value',
+        colorByPoint: true,
+        data: [
+        {% for risk,count in risk_values %}
+            {
+                name: "{{risk}}",
+                y: parseInt("{{count}}", 10)
+            },
+        {% endfor %}
+        ]
+        }]
+    });
+
+});
+</script>
+{% endblock js %}

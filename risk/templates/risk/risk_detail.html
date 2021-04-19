@@ -1,0 +1,126 @@
+{% extends 'risk/project_detail.html' %}
+
+{% block projekt-div %}
+<div class="bg-light col-10">
+    <div>
+        <p>Informace o metodě RIPRAN™
+            Metoda RIPRAN™ (RIsk PRoject ANalysis) je určena zejména pro analýzu projektových rizik. Autorem metody je Branislav Lacko. Metoda vznikla původně pro analýzu rizik automatizačních projektů. Praxe ukázala, že metodu je možno aplikovat pro analýzu rizik širokého spektra různých projektů a v určitých případech i pro analýzu jiných druhů rizik, než jsou projektová rizika. RIPRAN™ je ochranná známka, registrovaná Úřadem průmyslového vlastnictví Praha pod registračním čislem 283536.</p>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">Basic info</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Risk name</dt>
+                    <dd class="col-sm-8">{{object.name}}</dd>
+                    <dt class="col-sm-4">Threat</dt>
+                    <dd class="col-sm-8">{{object.threat}}</dd>
+                    <dt class="col-sm-4">Spúšťač</dt>
+                    <dd class="col-sm-8">{{object.starter}}</dd>
+                    <dt class="col-sm-4">Owner</dt>
+                    <dd class="col-sm-8">{{object.risk_assignee}}</dd>
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">{{object.description}}</dd>
+                </dl>
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8">{{object.risk_type}}</dd>
+                    <dt class="col-sm-4">State</dt>
+                    <dd class="col-sm-8">{{object.state}}</dd>
+
+                </dl>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">Výpočet rizika</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Probability</dt>
+                    <dd class="col-sm-8">{{object.probability}}</dd>
+                    <dt class="col-sm-4">Risk</dt>
+                    <dd class="col-sm-8">{{object.risk}}</dd>
+                </dl>
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Impact</dt>
+                    <dd class="col-sm-8">{{object.impact}}</dd>
+                </dl>
+
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">Reakcia na riziko</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">{{object.description}}</dd>
+                <dt class="col-sm-4">Comment</dt>
+                <dd class="col-sm-8">{{object.comment}}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-2">
+            <dt >Start date</dt>
+            <dd >{{object.start_date}}</dd>
+        </div>
+        <div class="col-2">
+            <dt >Change date</dt>
+            <dd >{{object.state_change_date}}</dd>
+        </div>
+        <div class="col-2">
+            <dt >Reaction date</dt>
+            <dd >{{object.reaction_date}}</dd>
+        </div>
+        <div class="col-6">
+            <div  class="float-right">
+                <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                    <div class="modal-dialog modal-xl" role="document">
+                      <div class="modal-content"></div>
+                    </div>
+                </div>
+                {% if perms.risk.delete_risk %}
+                    <button type="button" class="delete-risk btn btn-danger">Delete</button>
+                {% endif %}
+                {% if perms.risk.change_risk %}
+                    <button type="button" class="update-risk  btn btn-primary">Edit</button>
+                {% endif %}
+                <a type="button" class="btn btn-warning" href="{% url 'risk-print' object.pk %}">Print</a>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+{% endblock projekt-div %}
+
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $(".update-risk").modalForm({
+            formURL: "{% url 'risk-update' project_id phase_id object.pk %}"
+        });
+
+        $(".delete-risk").modalForm({
+            formURL: "{% url 'risk-delete' project_id  phase_id object.pk %}"
+        });
+
+    });
+
+    </script>
+
+{% endblock js %}

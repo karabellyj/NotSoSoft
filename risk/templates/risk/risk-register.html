@@ -1,0 +1,202 @@
+{% extends 'risk/project_detail.html' %}
+
+{% block projekt-div %}
+  <div class="bg-light col-10">
+    <div class="row mt-3">
+
+      <div class="col-md-4 dropdown">
+        <div class="form-inline">
+
+          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+            Phase
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+              {% for phase in phases %}
+                   <a class="dropdown-item" type="button" href="?phase={{phase.pk}}">{{phase.name}}</a>
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 dropdown">
+        <div class="form-inline">
+
+          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+            Category
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+              {% for risk_type in risk_types %}
+                   <a class="dropdown-item" type="button" href="?risk_type={{risk_type.pk}}">{{risk_type.name}}</a>
+              {% endfor %}
+          </div>
+      </div>
+
+      </div>
+      <div class="col-md-4 input-group float-right row">
+          <form action="" method="GET">
+            <div class="form-inline row">
+              <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
+              <button type="submit" class="btn btn-primary ml-2">
+                Vyhľadať
+              </button>
+            </div>
+        </form>
+
+    </div>
+
+    </div>
+
+
+    <div class="row mt-4">
+        <div class="col-md-10 offset-md-1 row btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="col-md-4 btn btn-secondary active">
+            <input type="radio" name="options" id="propF" autocomplete="off"> Probability
+          </label>
+          <label class="col-md-4 btn btn-secondary">
+            <input type="radio" name="options" id="dopF" autocomplete="off"> Impact
+          </label>
+          <label class=" col-md-4 btn btn-secondary">
+            <input type="radio" name="options" id="stateF" autocomplete="off"> State
+          </label>
+
+
+
+      </div>
+    </div>
+
+        <div class="m-3 p-3 card" id="propFD" style="display: none;">
+          <form method='GET'  action='' >
+            {% for prob,text in probabilities %}
+            <div class="form-check-inline ">
+
+
+              <input class="form-check-input" name="probability" type="checkbox" value="{{prob}}" id="{{prob}}">
+              <label class="form-check-label" for="{{prob}}">
+                {{text}}
+              </label>
+
+
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </form>
+        </div>
+
+        <div class="m-3 p-3 card" id="dopFD" style="display: none;">
+          <form method='GET'  action='' >
+            {% for impact,text in impacts %}
+            <div class="form-check-inline ">
+
+
+              <input class="form-check-input" name="impact" type="checkbox" value="{{impact}}" id="{{impact}}">
+              <label class="form-check-label" for="{{impact}}">
+                {{text}}
+              </label>
+
+
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </form>
+        </div>
+
+        <div class="m-3 p-3 card" id="stateFD" style="display: none;">
+          <form method='GET'  action='' >
+            {% for state,text in states %}
+            <div class="form-check-inline ">
+
+
+              <input class="form-check-input" name="state" type="checkbox" value="{{state}}" id="{{state}}">
+              <label class="form-check-label" for="{{state}}">
+                {{text}}
+              </label>
+
+
+            </div>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Filter</button>
+          </form>
+        </div>
+
+
+
+    <div class="row mt-3">
+       <div class="col-md-4 offset-md-4">
+
+
+      </div>
+    </div>
+    <div class="card mt-3">
+
+      <div class="card-body">
+          <table class="table">
+              <tr>
+                  <thead class="thead-light">
+                      <tr>
+                          <th scope="col">Risk name</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Threat</th>
+                          <th scope="col">Starter</th>
+                          <th scope="col">Owner</th>
+                          <th scope="col">Probability</th>
+                          <th scope="col">Impact</th>
+                          <th scope="col">Risk</th>
+                          <th scope="col">Reaction</th>
+                          <th scope="col">State</th>
+                          <th scope="col">Create date</th>
+                          <th scope="col">Modif. date</th>
+                          <th scope="col">Reaction date</th>
+
+                      </tr>
+                  </thead>
+                  <tbody>
+                     {% for risk in object_list %}
+                      <tr>
+                          <td>{{risk.name}}</td>
+                          <td>{{risk.risk_type}}</td>
+                          <td>{{risk.threat}}</td>
+                          <td>{{risk.starter}}</td>
+                          <td>{{risk.risk_assignee}}</td>
+                          <td>{{risk.probability}}</td>
+                          <td>{{risk.impact}}</td>
+                          <td>{{risk.risk}}</td>
+                          <td>{{risk.reaction}}</td>
+                          <td>{{risk.state}}</td>
+                          <td>{{risk.start_date}}</td>
+                          <td>{{risk.state_change_date|default_if_none:"-" }}</td>
+                          <td>{{risk.reaction_date|default_if_none:"-" }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+          </table>
+
+      </div>
+  </div>
+  </div>
+{% endblock projekt-div %}
+
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#propF").click(function(){
+          $("#dopFD").hide();
+          $("#stateFD").hide();
+          $("#propFD").toggle();
+
+              });
+        $("#dopF").click(function(){
+          $("#stateFD").hide();
+          $("#propFD").hide();
+          $("#dopFD").toggle();
+              });
+        $("#stateF").click(function(){
+          $("#propFD").hide();
+          $("#dopFD").hide();
+          $("#stateFD").toggle();
+              });
+      });
+
+</script>
+{% endblock js %}

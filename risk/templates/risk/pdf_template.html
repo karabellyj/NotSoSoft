@@ -1,0 +1,86 @@
+<html>
+ <head>
+   <title>{{object.name}}</title>
+ </head>
+ <body>
+   <div class="bg-light col-10">
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">Basic info</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Risk name</dt>
+                    <dd class="col-sm-8">{{object.name}}</dd>
+                    <dt class="col-sm-4">Threat</dt>
+                    <dd class="col-sm-8">{{object.threat}}</dd>
+                    <dt class="col-sm-4">starter</dt>
+                    <dd class="col-sm-8">{{object.starter}}</dd>
+                    <dt class="col-sm-4">Owner</dt>
+                    <dd class="col-sm-8">{{object.risk_assignee}}</dd>
+                    <dt class="col-sm-4">Description</dt>
+                    <dd class="col-sm-8">{{object.description}}</dd>
+                </dl>
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Category</dt>
+                    <dd class="col-sm-8">{{object.risk_type}}</dd>
+                    <dt class="col-sm-4">State</dt>
+                    <dd class="col-sm-8">{{object.state}}</dd>
+
+                </dl>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">Risk</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Probability</dt>
+                    <dd class="col-sm-8">{{object.probability}}</dd>
+                    <dt class="col-sm-4">Risk</dt>
+                    <dd class="col-sm-8">{{object.risk}}</dd>
+                </dl>
+                <dl class="col-sm-6 row">
+                    <dt class="col-sm-4">Impact</dt>
+                    <dd class="col-sm-8">{{object.impact}}</dd>
+                </dl>
+
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-header">
+            <h5 class="card-title">Risk reaction</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">{{object.description}}</dd>
+                <dt class="col-sm-4">Comment</dt>
+                <dd class="col-sm-8">{{object.comment}}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-2">
+            <dt >Start date</dt>
+            <dd >{{object.start_date}}</dd>
+        </div>
+        <div class="col-2">
+            <dt >Change date</dt>
+            <dd >{{object.state_change_date}}</dd>
+        </div>
+        <div class="col-2">
+            <dt >Reaction date</dt>
+            <dd >{{object.reaction_date}}</dd>
+        </div>
+    </div>
+</div>
+</body>
+</html>

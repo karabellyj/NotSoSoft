@@ -1,14 +1,147 @@
 {% extends 'base.html' %}
+
 {% block title %}Projects{% endblock title %}
 {% block content %}
-    {% if not user.is_superuser %}
-        <div>
-            <a href="{% url 'project-create' %}">Create Project</a>
+
+<div class="container-xl bg-light">
+    <div class=" row  justify-content-between pt-3">
+        <div class="col-3">
+            {% if not user.is_staff %}
+            <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content"></div>
+                </div>
+            </div>
+            {% if perms.risk.add_project %}
+              <button id="create-project" class="btn btn-success" type="button" name="button">Create Project</button>
+            {% endif %}
+            {% endif %}
         </div>
-    {% endif %}
-    <ul>
-    {% for project in object_list %}
-    <li><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a> - <a href="{% url 'project-update' project.pk %}">Edit</a></li>
-    {% endfor %}
-    </ul>
+        <div class="col-5">
+            <div class="input-group ">
+                <div class="form-inline row float-right">
+                    <div class="dropdown mr-2">
+                        <div class="form-inline">
+
+                          <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownPhases" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                            State
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownPhases">
+                            <a class="dropdown-item" type="button" href="?active">All</a>
+                            <a class="dropdown-item" type="button" href="?active=true">Active</a>
+                            <a class="dropdown-item" type="button" href="?active=false">Inactive</a>
+                          </div>
+                        </div>
+
+                    </div>
+                  <form action="" method="GET">
+                    <input class="form-control" type="search" name="q" placeholder="Search" aria-label="Search" />
+                    <button type="submit" class="btn btn-primary ml-2">
+                      Vyhľadať
+                    </button>
+                  </form>
+                </div>
+            </div>
+        </div>
+      </div>
+      <table class="table table-hover mt-3" id="projects-table">
+        <tr>
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Project name</th>
+                    <th scope="col">Project manager</th>
+                    <th scope="col">Start date</th>
+                    <th scope="col">End date</th>
+                    <th scope="col">State</th>
+                    <th scope="col"> </th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for project in object_list %}
+
+
+                <tr  data-href="{% url 'project-detail' project.pk %}">
+
+                    <td class='clickable-row' >{{ project.name }}</td>
+                    <td class='clickable-row'>{{ project.project_manager }}</td>
+                    <td class='clickable-row'>{{ project.start_date }}</td>
+                    <td class='clickable-row'> {{ project.estimated_end_date|default_if_none:"-" }}</td>
+                    <td class='clickable-row'>{{ project.is_active|yesno:"active,inactive"}}</td>
+
+                    <td>
+                    {% if perms.risk.change_project %}
+                      <button type="button" class="update-project btn btn-sm btn-warning" data-form-url="{% url 'project-update' project.pk %}">
+                        <span class="fa fa-pencil">Edit</span>
+                      </button>
+                    {% endif %}
+                    {% if perms.risk.delete_project %}
+                      <button type="button" class="delete-project btn btn-sm btn-danger" data-form-url="{% url 'project-delete' project.pk %}">
+                        <span class="fa fa-pencil">Deactivate</span>
+                      </button>
+                    {% endif %}
+
+                     <!--
+
+
+                       <button id="update-project" class="btn-success" type="button" name="button">Edit</button>
+                      <button class="btn-warning"><a href="{% url 'project-update' project.pk %}">Edit</a></button> -->
+                    </td>
+                </tr>
+
+
+                {% endfor %}
+            </tbody>
+    </table>
+
+
+</div>
+
+
 {% endblock content %}
+
+{% block js %}
+{{block.super}}
+<script type="text/javascript">
+    $(document).ready(function() {
+        {% if perms.risk.add_project %}
+          $("#create-project").modalForm({
+            formURL: "{% url 'project-create' %}"
+          });
+        {% endif %}
+        {% if perms.risk.change_project %}
+          $(".update-project").each(function () {
+            $(this).modalForm({
+              formURL: $(this).data("form-url"),
+            });
+          });
+        {% endif %}
+        {% if perms.risk.delete_project %}
+          $(".delete-project").each(function () {
+            $(this).modalForm({
+              formURL: $(this).data("form-url"),
+            });
+          });
+        {% endif %}
+
+        $(".table td.clickable-row").each(function() {
+            $(this).css("cursor","pointer").click(function() {
+              document.location = $(this).parent().data("href");
+            })
+        });
+
+
+
+
+
+
+    });
+
+    </script>
+
+{% endblock js %}
+
+  <!--  <ul>
+    {% for project in object_list %}
+    <li><a href="{% url 'project-detail' project.pk %}">{{ project.name }}</a> - </li>
+    {% endfor %}
+    </ul>-->

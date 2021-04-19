@@ -1,4 +1,4 @@
-from django import forms
+from bootstrap_modal_forms.forms import BSModalModelForm
 from django.forms import DateTimeInput, HiddenInput
 
 from users.utils import (get_customers_qs, get_phase_manager_qs,
@@ -7,7 +7,7 @@ from users.utils import (get_customers_qs, get_phase_manager_qs,
 from .models import Project, ProjectPhase, Risk
 
 
-class CreateProjectForm(forms.ModelForm):
+class CreateProjectForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -23,7 +23,7 @@ class CreateProjectForm(forms.ModelForm):
         }
 
 
-class UpdateProjectForm(forms.ModelForm):
+class UpdateProjectForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -35,7 +35,7 @@ class UpdateProjectForm(forms.ModelForm):
         fields = ('name', 'description', 'start_date', 'real_end', 'estimated_end_date', 'customers')
 
 
-class CreateProjectPhaseForm(forms.ModelForm):
+class CreateProjectPhaseForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -51,7 +51,7 @@ class CreateProjectPhaseForm(forms.ModelForm):
         }
 
 
-class UpdateProjectPhaseForm(forms.ModelForm):
+class UpdateProjectPhaseForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -63,7 +63,7 @@ class UpdateProjectPhaseForm(forms.ModelForm):
         fields = ('name', 'description', 'start_date', 'real_end_date', 'estimated_end_date', 'phase_manager')
 
 
-class CreateRiskForm(forms.ModelForm):
+class CreateRiskForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -78,7 +78,7 @@ class CreateRiskForm(forms.ModelForm):
         }
 
 
-class UpdateRiskForm(forms.ModelForm):
+class UpdateRiskForm(BSModalModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -86,5 +86,5 @@ class UpdateRiskForm(forms.ModelForm):
         self.fields['risk_assignee'].queryset = get_project_managers_qs(company=user.company) | get_phase_manager_qs(company=user.company)
 
     class Meta:
-        model = ProjectPhase
+        model = Risk
         exclude = ('project_phase',)

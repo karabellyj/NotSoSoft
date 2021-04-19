@@ -1,0 +1,60 @@
+{% extends 'risk/project_detail.html' %}
+{% block title %}Matrix{% endblock title %}
+{% block projekt-div %}
+<div class="bg-light col-10 d-flex justify-content-center">
+
+    <table class="table table-bordered mt-3" id="matrix">
+    <thead class="thead-light">
+    <th></th>
+    {% for impact in impacts %}
+        <th>{{ impact }}</th>
+    {% endfor %}
+    </thead>
+    <tbody>
+    {% for label, cols in matrix.items %}
+        <tr>
+            <th>{{ label }}</th>
+            {% for col in cols %}
+                <td>
+                    {% for risk in col %}
+                        <a href="{% url 'risk-detail' project_id risk.project_phase.pk risk.pk %}" class="text-dark"> {{ risk.name }} </a>
+                    {% endfor %}
+                </td>
+            {% endfor %}
+        </thead>
+        <tbody>
+        {% for label, cols in matrix.items %}
+            <tr>
+                <th>{{ label }}</th>
+                {% for col in cols %}
+                    <td>
+                        {% for risk in col %}
+                            <a href="{% url 'risk-detail' project_id risk.project_phase.pk risk.pk %}" class="text-dark"> {{ risk.name }} </a>
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+{% endblock projekt-div %}
+{% block js %}
+<script>
+    let table = document.getElementById('matrix');
+
+    table.rows[5].cells[2].classList.add('bg-success');
+    table.rows[5].cells[3].classList.add('bg-success');
+    table.rows[5].cells[4].classList.add('bg-success');
+    table.rows[5].cells[5].classList.add('bg-success');
+
+    table.rows[4].cells[3].classList.add('bg-success');
+    table.rows[4].cells[4].classList.add('bg-success');
+    table.rows[4].cells[5].classList.add('bg-success');
+
+    table.rows[3].cells[4].classList.add('bg-success');
+    table.rows[3].cells[5].classList.add('bg-success');
+
+    table.rows[2].cells[5].classList.add('bg-success');
+</script>
+{% endblock js %}
