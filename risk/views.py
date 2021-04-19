@@ -126,6 +126,9 @@ class ProjectPhaseCreateView(PermissionRequiredMixin, BSModalCreateView):
     template_name = "risk/project_phase_form.html"
     permission_required = ('risk.add_projectphase',)
 
+    def get_success_url(self):
+        return reverse_lazy('project-detail', kwargs={'pk': self.kwargs['project_id']})
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
