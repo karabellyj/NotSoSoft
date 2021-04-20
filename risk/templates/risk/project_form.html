@@ -30,8 +30,8 @@
             <label for="{{ form.customers.id_for_label }}">Customers:</label>
 
            <select class="selectpicker mt-3" multiple data-live-search="true" id="{{ form.customers.id_for_label }}" name="customers">
-              {% for customer in form.customers %}
-                    <option value="{{ customer.pk }}">{{ customer }}</option>
+              {% for value, text in form.customers.field.choices %}
+                    <option value="{{ value }}">{{ text }}</option>
               {% endfor %}
             </select>
         </div>
