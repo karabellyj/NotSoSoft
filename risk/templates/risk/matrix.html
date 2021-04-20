@@ -21,25 +21,12 @@
                     {% endfor %}
                 </td>
             {% endfor %}
-        </thead>
-        <tbody>
-        {% for label, cols in matrix.items %}
-            <tr>
-                <th>{{ label }}</th>
-                {% for col in cols %}
-                    <td>
-                        {% for risk in col %}
-                            <a href="{% url 'risk-detail' project_id risk.project_phase.pk risk.pk %}" class="text-dark"> {{ risk.name }} </a>
-                        {% endfor %}
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
+    {% endfor %}
     </table>
     </div>
 {% endblock projekt-div %}
 {% block js %}
+{{ block.super }}
 <script>
     let table = document.getElementById('matrix');
 
