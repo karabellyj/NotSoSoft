@@ -23,9 +23,11 @@
             <li class="nav-item">
               <a class="nav-link text-white" href={% url 'stats' %}>Štatistiky</a>
             </li>
+            {% if user.is_staff %}
             <li class="nav-item">
               <a class="nav-link text-white" href="/admin/">Admin</a>
             </li>
+            {% endif %}
           </ul>
           <ul class="navbar-nav">
             {% if user.is_authenticated %}
