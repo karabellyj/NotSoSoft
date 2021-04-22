@@ -33,10 +33,10 @@
                           <div class="modal-content"></div>
                         </div>
                     </div>
-                    {% if perms.risk.change_projectphase %}
+                    {% if perms.risk.change_projectphase and object.is_active %}
                         <button type="button"  id="update-phase" class=" btn btn-warning">Edit</button>
                     {% endif %}
-                    {% if perms.risk.delete_projectphase %}
+                    {% if perms.risk.delete_projectphase and object.is_active %}
                         <button type="button" id="delete-phase" class=" btn btn-danger">Deactivate</button>
                     {% endif %}
                 </div>
@@ -106,7 +106,7 @@
                                     {% endif %}
                                     {% if perms.risk.delete_risk %}
                                         <button type="button" class="delete-risk btn btn-sm btn-danger" data-form-url="{% url 'risk-delete' project_id object.pk risk.pk %}">
-                                            <span class="fa fa-pencil">Deactivate</span>
+                                            <span class="fa fa-pencil">Delete</span>
                                         </button>
                                     {% endif %}
                                 </td>
