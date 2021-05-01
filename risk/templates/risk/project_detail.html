@@ -54,10 +54,10 @@
                                   <div class="modal-content"></div>
                                 </div>
                             </div>
-                            {% if perms.risk.change_project %}
+                            {% if perms.risk.change_project and object.is_active %}
                                 <button type="button" class="update-project btn btn-warning">Edit</button>
                             {% endif %}
-                            {% if perms.risk.delete_project %}
+                            {% if perms.risk.delete_project and object.is_active %}
                                 <button type="button" class="delete-project btn btn-danger">Deactivate</button>
                             {% endif %}
                         </div>
@@ -106,12 +106,12 @@
                                         <td class="clickable-row">{{ phase.estimated_end_date|default_if_none:"-" }}</td>
                                         <td class="clickable-row">{{ phase.is_active|yesno:"active,inactive" }}</td>
                                         <td>
-                                            {% if perms.risk.change_projectphase %}
+                                            {% if perms.risk.change_projectphase and phase.is_active %}
                                                 <button type="button" class="update-phase btn btn-sm btn-warning" data-form-url="{% url 'project-phase-update' project_id phase.pk %}">
                                                     <span class="fa fa-pencil">Edit</span>
                                                 </button>
                                             {% endif %}
-                                            {% if perms.risk.delete_projectphase %}
+                                            {% if perms.risk.delete_projectphase and phase.is_active %}
                                                 <button type="button" class="delete-phase btn btn-sm btn-danger" data-form-url="{% url 'project-phase-delete' project_id phase.pk  %}">
                                                     <span class="fa fa-pencil">Deactivate</span>
                                                 </button>

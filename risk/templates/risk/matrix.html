@@ -1,5 +1,18 @@
 {% extends 'risk/project_detail.html' %}
 {% block title %}Matrix{% endblock title %}
+{% block extra_css %}
+<style>
+    .success {
+        background-color: rgba(40, 167, 69, 0.4);
+    }
+    .warning {
+        background-color: rgba(255, 193, 7, 0.4);
+    }
+    .danger {
+        background-color: rgba(220, 53, 69, 0.4);
+    }
+</style>
+{% endblock extra_css %}
 {% block projekt-div %}
 <div class="bg-light col-10 d-flex justify-content-center">
 
@@ -30,18 +43,34 @@
 <script>
     let table = document.getElementById('matrix');
 
-    table.rows[5].cells[2].classList.add('bg-success');
-    table.rows[5].cells[3].classList.add('bg-success');
-    table.rows[5].cells[4].classList.add('bg-success');
-    table.rows[5].cells[5].classList.add('bg-success');
+    table.rows[5].cells[1].classList.add('warning');
+    table.rows[5].cells[2].classList.add('success');
+    table.rows[5].cells[3].classList.add('success');
+    table.rows[5].cells[4].classList.add('success');
+    table.rows[5].cells[5].classList.add('success');
 
-    table.rows[4].cells[3].classList.add('bg-success');
-    table.rows[4].cells[4].classList.add('bg-success');
-    table.rows[4].cells[5].classList.add('bg-success');
+    table.rows[4].cells[1].classList.add('warning');
+    table.rows[4].cells[2].classList.add('warning');
+    table.rows[4].cells[3].classList.add('success');
+    table.rows[4].cells[4].classList.add('success');
+    table.rows[4].cells[5].classList.add('success');
 
-    table.rows[3].cells[4].classList.add('bg-success');
-    table.rows[3].cells[5].classList.add('bg-success');
+    table.rows[3].cells[1].classList.add('warning');
+    table.rows[3].cells[2].classList.add('warning');
+    table.rows[3].cells[3].classList.add('warning');
+    table.rows[3].cells[4].classList.add('success');
+    table.rows[3].cells[5].classList.add('success');
 
-    table.rows[2].cells[5].classList.add('bg-success');
+    table.rows[2].cells[1].classList.add('danger');
+    table.rows[2].cells[2].classList.add('danger');
+    table.rows[2].cells[3].classList.add('warning');
+    table.rows[2].cells[4].classList.add('warning');
+    table.rows[2].cells[5].classList.add('success');
+
+    table.rows[1].cells[1].classList.add('danger');
+    table.rows[1].cells[2].classList.add('danger');
+    table.rows[1].cells[3].classList.add('warning');
+    table.rows[1].cells[4].classList.add('warning');
+    table.rows[1].cells[5].classList.add('warning');
 </script>
 {% endblock js %}
