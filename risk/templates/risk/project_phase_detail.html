@@ -62,7 +62,7 @@
                                     </div>
                                   </div>
                             </div>
-                            {% if perms.risk.add_risk %}
+                            {% if perms.risk.add_risk and object.is_active %}
                                 <button id="create-risk" class="btn btn-success" type="button" name="button">Create Risk</button>
                             {% endif %}
                         </div>
