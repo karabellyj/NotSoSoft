@@ -264,6 +264,7 @@ class RiskListView(PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        qs = qs.filter(project_phase__project=self.kwargs['project_id'])
         q = self.request.GET.get('q')
         phase = self.request.GET.get('phase')
         risk_type = self.request.GET.get('risk_type')
