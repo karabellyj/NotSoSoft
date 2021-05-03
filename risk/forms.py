@@ -1,6 +1,5 @@
 from bootstrap_modal_forms.forms import BSModalModelForm
-from django.core.exceptions import ValidationError
-from django.forms import DateTimeInput, HiddenInput
+from django.forms import DateTimeInput, HiddenInput, ValidationError
 
 from users.utils import (get_customers_qs, get_phase_manager_qs,
                          get_project_managers_qs)
@@ -51,15 +50,12 @@ class CreateProjectPhaseForm(BSModalModelForm):
             'start_date': DateTimeInput
         }
 
-    def clean(self):
-        cleaned_data = self.cleaned_data
+    def full_clean(self):
+        super().full_clean()
         try:
-            ProjectPhase.objects.get(name=cleaned_data['name'])
-        except ProjectPhase.DoesNotExist:
-            pass
-        else:
-            raise ValidationError(f'Project phase with name "{cleaned_data["name"]}" already exists.')
-        return cleaned_data
+            self.instance.validate_unique()
+        except ValidationError as e:
+            self._update_errors(e)
 
 
 class UpdateProjectPhaseForm(BSModalModelForm):
