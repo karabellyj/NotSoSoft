@@ -18,7 +18,7 @@
   <div style="margin-top: 50%">
     {% if form.errors %}
     <h4 class="text-danger">Your username and password didn't match. Please try again.</h4>
-  {% endif %}
+    {% endif %}
     {% if next %}
     {% if user.is_authenticated %}
     <h4 class="text-danger">Your account doesn't have access to this page. To proceed,

@@ -18,14 +18,14 @@
 
           <ul class="navbar-nav">
             <li class="nav-item active">
-              <a class="nav-link text-white" href={% url 'project-list' %}>Projekty</a>
+              <a class="nav-link text-white" href={% url 'project-list' %}>Project</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href={% url 'stats' %}>Štatistiky</a>
+              <a class="nav-link text-white" href={% url 'stats' %}>Statistics</a>
             </li>
             {% if user.is_staff %}
             <li class="nav-item">
-              <a class="nav-link text-white" href="/admin/">Admin</a>
+              <a class="nav-link text-white" href="/admin/">Admin page</a>
             </li>
             {% endif %}
           </ul>
