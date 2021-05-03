@@ -20,7 +20,7 @@
        <div class="fieldWrapper">
             {{ form.phase_manager.errors }}
             <label for="{{ form.phase_manager.id_for_label }}">{{form.phase_manager.label}}</label>
-            <select class="custom-select mr-sm-2" name="phase_manager" id="{{form.phase_manager.id_for_label}}">
+            <select class="custom-select mr-sm-2" name="phase_manager" id="{{form.phase_manager.id_for_label}}" required>
                 {% for value, text in form.phase_manager.field.choices %}
                     <option value="{{ value }}" >{{ text }}</option>
                 {% endfor %}
