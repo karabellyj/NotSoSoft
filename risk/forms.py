@@ -1,5 +1,5 @@
 from bootstrap_modal_forms.forms import BSModalModelForm
-from django.forms import DateTimeInput, HiddenInput, ValidationError
+from django.forms import DateTimeInput, HiddenInput
 
 from users.utils import (get_customers_qs, get_phase_manager_qs,
                          get_project_managers_qs)
@@ -49,13 +49,6 @@ class CreateProjectPhaseForm(BSModalModelForm):
             'project': HiddenInput,
             'start_date': DateTimeInput
         }
-
-    def full_clean(self):
-        super().full_clean()
-        try:
-            self.instance.validate_unique()
-        except ValidationError as e:
-            self._update_errors(e)
 
 
 class UpdateProjectPhaseForm(BSModalModelForm):
